@@ -527,7 +527,9 @@
             successCallback(events);
           } catch (error) {
             console.error(error);
-            detailsEl.innerHTML = '<div class="event-details-label">Calendar unavailable</div><p class="event-details-empty">We could not load the Google Calendar feed right now.</p>';
+            // Fallback: embed the public Google Calendar iframe when the ICS fetch fails (CORS or network issue)
+            calendarEl.innerHTML = '<iframe src="https://calendar.google.com/calendar/embed?src=cyber.saguaros%40gmail.com&ctz=America%2FPhoenix" style="border:0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>';
+            detailsEl.innerHTML = '<div class="event-details-label">Calendar unavailable</div><p class="event-details-empty">We could not load the Google Calendar feed programmatically; showing embedded calendar instead.</p>';
             failureCallback(error);
           }
         },
