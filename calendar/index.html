@@ -226,7 +226,8 @@
   <script src="/js/script.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const feedUrl = 'https://calendar.google.com/calendar/ical/cyber.saguaros%40gmail.com/public/basic.ics';
+      // Use a same-origin cached copy of the public ICS so browser CORS doesn't block fetch.
+      const feedUrl = '/calendar/calendar.ics';
       const calendarEl = document.getElementById('calendar');
       const detailsEl = document.getElementById('event-details');
       const RRule = window.rrule.RRule;
@@ -527,9 +528,7 @@
             successCallback(events);
           } catch (error) {
             console.error(error);
-            // Fallback: embed the public Google Calendar iframe when the ICS fetch fails (CORS or network issue)
-            calendarEl.innerHTML = '<iframe src="https://calendar.google.com/calendar/embed?src=cyber.saguaros%40gmail.com&ctz=America%2FPhoenix" style="border:0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>';
-            detailsEl.innerHTML = '<div class="event-details-label">Calendar unavailable</div><p class="event-details-empty">We could not load the Google Calendar feed programmatically; showing embedded calendar instead.</p>';
+            detailsEl.innerHTML = '<div class="event-details-label">Calendar unavailable</div><p class="event-details-empty">We could not load the Google Calendar feed right now.</p>';
             failureCallback(error);
           }
         },
