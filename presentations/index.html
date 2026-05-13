@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta charset="utf-8">
+	<title>Presentations</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="description" content="Cyber Saguaros presentation archive and weekly talk lineup.">
+	<meta name="author" content="Cyber Saguaros">
+	<meta name="generator" content="Copilot" />
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400|Josefin+Sans:300,400,600,700">
+	<link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+	<link rel="stylesheet" href="/plugins/themefisher-font/themefisher-font.min.css">
+	<link rel="stylesheet" href="/plugins/slick/slick.min.css">
+	<link rel="stylesheet" href="/scss/style.min.css" media="screen">
+
+	<meta property="og:title" content="Presentations" />
+	<meta property="og:description" content="Cyber Saguaros presentation archive and weekly talk lineup." />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="/presentations/" />
+
+	<style>
+		body {
+			background:
+				radial-gradient(circle at top, rgba(203, 166, 247, 0.18), transparent 34%),
+				linear-gradient(180deg, #1e1e2e 0%, #181825 100%);
+			color: #cdd6f4;
+			font-family: 'Droid Serif', 'Josefin Sans', sans-serif;
+		}
+
+		header.navigation {
+			background-color: #181825;
+		}
+
+		.page-hero {
+			padding: 3.5rem 0 1.5rem;
+		}
+
+		.page-kicker {
+			color: #94e2d5;
+			text-transform: uppercase;
+			letter-spacing: 0.2em;
+			font-size: 0.8rem;
+			margin-bottom: 0.9rem;
+		}
+
+		.page-title {
+			color: #f5e0dc;
+			font-size: clamp(2.4rem, 4vw, 4rem);
+			line-height: 1.05;
+			margin-bottom: 1rem;
+		}
+
+		.page-copy {
+			color: rgba(205, 214, 244, 0.86);
+			font-size: 1.08rem;
+			max-width: 760px;
+			margin: 0 auto 1.75rem;
+			line-height: 1.7;
+		}
+
+		.page-pill-row {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 0.75rem;
+			margin-bottom: 2.25rem;
+		}
+
+		.page-pill {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			padding: 0.65rem 1rem;
+			border-radius: 999px;
+			background: rgba(24, 24, 37, 0.9);
+			border: 1px solid rgba(203, 166, 247, 0.18);
+			color: #cdd6f4;
+			font-size: 0.92rem;
+		}
+
+		.section-title {
+			color: #f5e0dc;
+			font-size: 1.7rem;
+			margin-bottom: 1rem;
+		}
+
+		.section-subtitle {
+			color: rgba(205, 214, 244, 0.78);
+			margin-bottom: 1.5rem;
+			max-width: 820px;
+		}
+
+		.feature-panel,
+		.presentation-card,
+		.cta-panel {
+			background: rgba(24, 24, 37, 0.94);
+			border: 1px solid rgba(203, 166, 247, 0.18);
+			border-radius: 22px;
+			box-shadow: 0 16px 50px rgba(0, 0, 0, 0.28);
+		}
+
+		.feature-panel {
+			padding: 1.5rem;
+			margin-bottom: 1.5rem;
+		}
+
+		.feature-stat {
+			display: flex;
+			align-items: center;
+			gap: 0.9rem;
+			padding: 0.8rem 0;
+			border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+		}
+
+		.feature-stat:last-child {
+			border-bottom: 0;
+			padding-bottom: 0;
+		}
+
+		.feature-stat:first-child {
+			padding-top: 0;
+		}
+
+		.feature-stat-value {
+			color: #cba6f7;
+			font-size: 1.5rem;
+			font-weight: 700;
+			min-width: 2.5rem;
+		}
+
+		.feature-stat-label {
+			color: #f5e0dc;
+			font-weight: 700;
+			margin-bottom: 0.1rem;
+		}
+
+		.feature-stat-copy {
+			color: rgba(205, 214, 244, 0.76);
+			font-size: 0.95rem;
+			line-height: 1.45;
+		}
+
+		.presentation-card {
+			padding: 1.35rem;
+			height: 100%;
+			transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+		}
+
+		.presentation-card:hover {
+			transform: translateY(-3px);
+			border-color: rgba(203, 166, 247, 0.35);
+			box-shadow: 0 22px 60px rgba(0, 0, 0, 0.34);
+		}
+
+		.presentation-topline {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.5rem;
+			align-items: center;
+			margin-bottom: 0.85rem;
+		}
+
+		.presentation-date,
+		.presentation-level,
+		.presentation-type {
+			display: inline-flex;
+			align-items: center;
+			padding: 0.3rem 0.65rem;
+			border-radius: 999px;
+			font-size: 0.82rem;
+			font-weight: 700;
+		}
+
+		.presentation-date {
+			background: rgba(137, 180, 250, 0.18);
+			color: #89b4fa;
+		}
+
+		.presentation-level {
+			background: rgba(203, 166, 247, 0.18);
+			color: #cba6f7;
+		}
+
+		.presentation-type {
+			background: rgba(148, 226, 213, 0.14);
+			color: #94e2d5;
+		}
+
+		.presentation-title {
+			color: #f5e0dc;
+			font-size: 1.3rem;
+			margin-bottom: 0.65rem;
+		}
+
+		.presentation-copy {
+			color: rgba(205, 214, 244, 0.82);
+			line-height: 1.65;
+			margin-bottom: 1rem;
+		}
+
+		.presentation-footer {
+			display: flex;
+			justify-content: space-between;
+			gap: 1rem;
+			align-items: center;
+			color: rgba(205, 214, 244, 0.66);
+			font-size: 0.92rem;
+			padding-top: 0.8rem;
+			border-top: 1px solid rgba(148, 163, 184, 0.12);
+		}
+
+		.cta-panel {
+			margin-top: 2rem;
+			padding: 1.5rem;
+			text-align: center;
+		}
+
+		.cta-panel h3 {
+			color: #f5e0dc;
+			margin-bottom: 0.75rem;
+		}
+
+		.cta-panel p {
+			color: rgba(205, 214, 244, 0.78);
+			margin-bottom: 1rem;
+		}
+
+		.btn-presentations {
+			background-color: #cba6f7;
+			border-color: #cba6f7;
+			color: #1e1e2e;
+			border-radius: 999px;
+			padding: 0.8rem 1.5rem;
+			font-weight: 700;
+		}
+
+		.btn-presentations:hover {
+			background-color: #d8bafc;
+			border-color: #d8bafc;
+			color: #1e1e2e;
+		}
+
+		footer.footer {
+			background-color: #1e1e2e;
+			color: #cdd6f4;
+			padding: 2rem 1rem;
+			text-align: center;
+			margin-top: 2rem;
+		}
+
+		@media (max-width: 767px) {
+			.feature-panel {
+				margin-top: 1rem;
+			}
+
+			.presentation-footer {
+				flex-direction: column;
+				align-items: flex-start;
+			}
+		}
+	</style>
+</head>
+<body id="body">
+<!-- preloader start -->
+<div class="preloader" style="background:#1d1e20;"></div>
+<!-- preloader end -->
+
+<header class="navigation" style="background-color: #181825;">
+	<div class="container">
+		<nav class="navbar navbar-expand-lg navbar-dark">
+			<a class="navbar-brand" href="/">
+				<img src="/images/logo.png" alt="Cyber Saguaros" style="max-height: 40px;">
+			</a>
+			<div class="collapse navbar-collapse">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+					<li class="nav-item"><a class="nav-link" href="/calendar/">Calendar</a></li>
+					<li class="nav-item"><a class="nav-link active" href="/presentations/">Presentations</a></li>
+					<li class="nav-item"><a class="nav-link" href="/writeups/">Writeups</a></li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+</header>
+
+<section class="page-hero">
+	<div class="container text-center">
+		<div class="page-kicker">Cyber Saguaros Archive</div>
+		<h1 class="page-title">Presentations</h1>
+		<p class="page-copy">
+			Weekly talks, walkthroughs, and guest lectures covering a range of cybersecurity topics and skill levels.
+		</p>
+		<div class="page-pill-row">
+			<span class="page-pill">Weekly workshops</span>
+			<span class="page-pill">Guest lectures</span>
+			<span class="page-pill">Hands-on demos</span>
+			<span class="page-pill">Archive ready</span>
+		</div>
+	</div>
+</section>
+
+<section class="section pt-0">
+	<div class="container">
+		<div class="row align-items-stretch">
+			<div class="col-lg-4 mb-4 mb-lg-0">
+				<div class="feature-panel h-100">
+					<div class="section-title mb-3">Format</div>
+					<div class="feature-stat">
+						<div class="feature-stat-value">01</div>
+						<div>
+							<div class="feature-stat-label">Open with a topic</div>
+							<div class="feature-stat-copy">Start with a practical problem, tool, or technique that the club can explore together.</div>
+						</div>
+					</div>
+					<div class="feature-stat">
+						<div class="feature-stat-value">02</div>
+						<div>
+							<div class="feature-stat-label">Show the workflow</div>
+							<div class="feature-stat-copy">Keep the flow hands-on with examples, demos, or a short walkthrough.</div>
+						</div>
+					</div>
+					<div class="feature-stat">
+						<div class="feature-stat-value">03</div>
+						<div>
+							<div class="feature-stat-label">Keep the archive</div>
+							<div class="feature-stat-copy">Add the slide link, a short summary, and any follow-up resources after the talk.</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-8">
+				<h2 class="section-title">Recent talks</h2>
+				<p class="section-subtitle">
+				</p>
+				<div class="row">
+					<div class="col-md-6 mb-4">
+						<article class="presentation-card">
+							<div class="presentation-topline">
+								<span class="presentation-date">Fall 2025</span>
+								<span class="presentation-level">Easy</span>
+								<span class="presentation-type">Workshop</span>
+							</div>
+							<h3 class="presentation-title">Linux Intro</h3>
+							<p class="presentation-copy">A beginner-friendly walkthrough of the shell, filesystem navigation, permissions, and the terminal habits that make later tooling easier.</p>
+							<div class="presentation-footer">
+								<span>Foundations for new members</span>
+								<span>Slides and notes</span>
+							</div>
+						</article>
+					</div>
+
+					<div class="col-md-6 mb-4">
+						<article class="presentation-card">
+							<div class="presentation-topline">
+								<span class="presentation-date">Fall 2025</span>
+								<span class="presentation-level">Medium</span>
+								<span class="presentation-type">Workshop</span>
+							</div>
+							<h3 class="presentation-title">Introduction to Web</h3>
+							<p class="presentation-copy">A practical intro to how web apps behave, with an emphasis on request flow, common vulnerabilities, and where to start testing.</p>
+							<div class="presentation-footer">
+								<span>Web fundamentals</span>
+								<span>Slides and notes</span>
+							</div>
+						</article>
+					</div>
+
+					<div class="col-md-6 mb-4">
+						<article class="presentation-card">
+							<div class="presentation-topline">
+								<span class="presentation-date">Spring 2026</span>
+								<span class="presentation-level">Medium</span>
+								<span class="presentation-type">Demo</span>
+							</div>
+							<h3 class="presentation-title">Reverse Engineering Intro</h3>
+							<p class="presentation-copy">An introduction to debugging, binary analysis, and the way to reason about unknown programs using common reversing tools.</p>
+							<div class="presentation-footer">
+								<span>Binary analysis basics</span>
+								<span>Slides and notes</span>
+							</div>
+						</article>
+					</div>
+
+					<div class="col-md-6 mb-4">
+						<article class="presentation-card">
+							<div class="presentation-topline">
+								<span class="presentation-date">Spring 2026</span>
+								<span class="presentation-level">Medium</span>
+								<span class="presentation-type">Guest Lecture</span>
+							</div>
+							<h3 class="presentation-title">OSINT</h3>
+							<p class="presentation-copy">An ethical approach to open-source investigation, source collection, and building repeatable research workflows.</p>
+							<div class="presentation-footer">
+								<span>Research and verification</span>
+								<span>Slides and notes</span>
+							</div>
+						</article>
+					</div>
+
+					<div class="col-md-6 mb-4 mb-md-0">
+						<article class="presentation-card">
+							<div class="presentation-topline">
+								<span class="presentation-date">Spring 2026</span>
+								<span class="presentation-level">Hard</span>
+								<span class="presentation-type">Workshop</span>
+							</div>
+							<h3 class="presentation-title">XSS Intro</h3>
+							<p class="presentation-copy">A focused overview of reflected and stored injection issues, safe proof-of-concept testing, and defensive mitigations.</p>
+							<div class="presentation-footer">
+								<span>Browser attack surface</span>
+								<span>Slides and notes</span>
+							</div>
+						</article>
+					</div>
+
+					<div class="col-md-6 mb-4 mb-md-0">
+						<article class="presentation-card">
+							<div class="presentation-topline">
+								<span class="presentation-date">Spring 2026</span>
+								<span class="presentation-level">Hard</span>
+								<span class="presentation-type">Workshop</span>
+							</div>
+							<h3 class="presentation-title">Cryptography Basics</h3>
+							<p class="presentation-copy">An approachable talk on classic ciphers, modern primitives, and the ways cryptographic mistakes show up in real-world systems.</p>
+							<div class="presentation-footer">
+								<span>Math and implementation</span>
+								<span>Slides and notes</span>
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="container text-center">
+	<a href="https://ctftime.org/team/310159" style="color:#d2d2d7" class="center h1 tf-ion-flag" target="_blank"></a>
+	<a href="https://discord.gg/BduAZk6r2g" style="color:#d2d2d7" class="center h1 tf-ion-social-discord" target="_blank"></a>
+	<a href="https://twitter.com/cybersaguaros/" style="color:#d2d2d7" class="center h1 tf-ion-social-twitter" target="_blank"></a>
+	<a href="https://www.facebook.com/cybersaguaros" style="color:#d2d2d7" class="center h1 tf-ion-social-facebook" target="_blank"></a>
+	<a href="https://github.com/cybersaguaros/" style="color:#d2d2d7" class="center h1 tf-ion-social-github" target="_blank"></a>
+</div>
+
+<footer class="footer" style="background-color: #1e1e2e; color: #cdd6f4;">
+	<div class="container text-center">
+		<p>&copy; 2025 Cyber Saguaros. All rights reserved.</p>
+	</div>
+</footer>
+
+<script src="/plugins/jquery/jquery.js"></script>
+<script src="/plugins/bootstrap/bootstrap.min.js"></script>
+<script src="/plugins/slick/slick.min.js"></script>
+<script src="/js/script.js"></script>
+</body>
+</html>

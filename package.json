@@ -1,0 +1,12 @@
+{
+  "name": "cybersaguaros-site-tools",
+  "version": "1.0.0",
+  "description": "Build helpers for Cyber Saguaros writeups (generate HTML from markdown)",
+  "private": true,
+  "scripts": {
+    "build:writeups": "node scripts/build-writeups.js"
+  },
+  "dependencies": {
+    "marked": "^6.0.0"
+  }
+}

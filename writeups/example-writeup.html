@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>Example Writeup - Writeup</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CTF Writeup">
+  <meta name="author" content="Cyber Saguaros">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400|Josefin+Sans:300,400,600,700">
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="/plugins/themefisher-font/themefisher-font.min.css">
+  <link rel="stylesheet" href="/scss/style.min.css" media="screen">
+
+  <style>
+    body {
+      background:
+        radial-gradient(circle at top, rgba(203, 166, 247, 0.18), transparent 34%),
+        linear-gradient(180deg, #1e1e2e 0%, #181825 100%);
+      color: #cdd6f4;
+      font-family: 'Droid Serif', 'Josefin Sans', sans-serif;
+    }
+
+    header.navigation {
+      background-color: #181825;
+    }
+
+    .writeup-container {
+      max-width: 900px;
+      margin: 3rem auto;
+      background: rgba(24, 24, 37, 0.94);
+      border: 1px solid rgba(203, 166, 247, 0.18);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.28);
+    }
+
+    .markdown-content {
+      color: rgba(205, 214, 244, 0.86);
+      line-height: 1.8;
+    }
+
+    .markdown-content h1 { color: #f5e0dc; font-size: 2.2rem; margin: 0 0 1rem; line-height: 1.2; border-bottom: 2px solid rgba(203,166,247,0.2); padding-bottom:1rem; }
+    .markdown-content h2 { color: #f5e0dc; font-size: 1.6rem; margin: 2rem 0 1rem; border-bottom: 1px solid rgba(203,166,247,0.12); padding-bottom:0.5rem; }
+    .markdown-content h3 { color: #cba6f7; font-size: 1.3rem; margin: 1.5rem 0 0.8rem; }
+    .markdown-content p { margin-bottom: 1rem; }
+    .markdown-content code { background: rgba(0,0,0,0.3); color: #94e2d5; padding:0.2rem 0.5rem; border-radius:4px; font-family: 'Courier New', monospace; }
+    .markdown-content pre { background: rgba(0,0,0,0.4); border-left: 3px solid #cba6f7; padding:1rem; border-radius:6px; overflow-x:auto; margin:1rem 0; }
+    .markdown-content pre code { background:none; color:#89b4fa; padding:0; }
+    .markdown-content blockquote { border-left:4px solid #cba6f7; padding-left:1rem; color:rgba(205,214,244,0.76); font-style:italic; }
+    .markdown-content table { border-collapse: collapse; width:100%; margin:1rem 0; }
+    .markdown-content table th, .markdown-content table td { border:1px solid rgba(203,166,247,0.2); padding:0.75rem; text-align:left; }
+    .markdown-content table th { background: rgba(203,166,247,0.1); color:#f5e0dc; font-weight:700; }
+
+    footer.footer { background-color:#1e1e2e; color:#cdd6f4; padding:2rem 1rem; text-align:center; margin-top:3rem; border-top:1px solid rgba(203,166,247,0.12); }
+  </style>
+</head>
+
+<body>
+  <header class="navigation" style="background-color: #1e1e2e;">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="/">Cyber Saguaros</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="/calendar/">Calendar</a></li>
+            <li class="nav-item"><a class="nav-link" href="/presentations/">Presentations</a></li>
+            <li class="nav-item"><a class="nav-link" href="/writeups/">Writeups</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <a href="/writeups/" class="back-link">← Back to Writeups</a>
+      <div class="writeup-container">
+        <div class="markdown-content">
+          <h1 id="example-writeup">Example Writeup</h1>
+<p><strong>Author:</strong> Jordan Lanham<br><strong>Event:</strong> Example CTF 2025<br><strong>Category:</strong> Misc<br><strong>Date:</strong> Jan 15, 2025<br><strong>Read Time:</strong> 8 minutes</p>
+<hr>
+<h2 id="overview">Overview</h2>
+<p>This is a template writeup showing how to format your CTF solution writeups. Replace this entire file with your actual writeup content.</p>
+<h2 id="challenge-description">Challenge Description</h2>
+<p>Provide a brief description of the challenge here. What was the objective? What were the constraints?</p>
+<p>Example: </p>
+<blockquote>
+<p>We were given a file called <code>challenge.txt</code> and needed to find the hidden flag using basic cryptography.</p>
+</blockquote>
+<h2 id="initial-analysis">Initial Analysis</h2>
+<p>Start by describing what you found when you first examined the challenge:</p>
+<ul>
+<li>What files or services were provided?</li>
+<li>What were the initial observations?</li>
+<li>What tools did you use for reconnaissance?</li>
+</ul>
+<h2 id="solution-approach">Solution Approach</h2>
+<p>Walk through your step-by-step approach to solving the challenge:</p>
+<h3 id="step-1-reconnaissance">Step 1: Reconnaissance</h3>
+<p>Describe your initial exploration of the challenge. What did you discover?</p>
+<h3 id="step-2-vulnerability-identification">Step 2: Vulnerability Identification</h3>
+<p>What vulnerability or weakness did you find?</p>
+<h3 id="step-3-exploitation">Step 3: Exploitation</h3>
+<p>How did you exploit the vulnerability? What was your attack strategy?</p>
+<h3 id="step-4-flag-extraction">Step 4: Flag Extraction</h3>
+<p>How did you get the final flag?</p>
+<h2 id="code--exploit">Code / Exploit</h2>
+<p>Include your solution code here:</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+# Example solution code
+
+def solve_challenge(input_file):
+    with open(input_file, &#39;r&#39;) as f:
+        data = f.read()
+    
+    # Your solution logic here
+    return flag
+
+if __name__ == &quot;__main__&quot;:
+    flag = solve_challenge(&quot;challenge.txt&quot;)
+    print(f&quot;Flag: {flag}&quot;)
+</code></pre>
+<p>Or in another language:</p>
+<pre><code class="language-bash">#!/bin/bash
+# Bash solution example
+
+echo &quot;Processing challenge...&quot;
+flag=$(cat challenge.txt | tr &#39;a-z&#39; &#39;n-za-m&#39;)  # ROT13 example
+echo &quot;Flag: $flag&quot;
+</code></pre>
+<h2 id="technical-details">Technical Details</h2>
+<p>Explain any important technical concepts or tricks used:</p>
+<ul>
+<li><strong>Encryption/Decryption:</strong> What algorithm was used?</li>
+<li><strong>Encoding:</strong> Base64, hex, ASCII?</li>
+<li><strong>Protocol:</strong> HTTP, SSH, custom?</li>
+<li><strong>Vulnerability:</strong> SQL injection, XSS, buffer overflow?</li>
+</ul>
+<h2 id="key-insights">Key Insights</h2>
+<p>What did you learn from this challenge? What techniques could be reused?</p>
+<ul>
+<li>This type of challenge teaches you about [X concept]</li>
+<li>A useful tool to remember is [Y tool]</li>
+<li>Watch out for [Z common mistake]</li>
+</ul>
+<h2 id="the-flag">The Flag</h2>
+<pre><code>flag{this_is_the_example_flag_format}
+</code></pre>
+<h2 id="resources">Resources</h2>
+<p>Links to helpful resources used in solving this challenge:</p>
+<ul>
+<li><a href="https://example.com">Resource 1</a></li>
+<li><a href="https://example.com">Resource 2</a></li>
+<li><a href="https://example.com">Related CVE</a></li>
+</ul>
+<hr>
+<p><strong>Tips for writing great writeups:</strong></p>
+<ul>
+<li>Be clear and verbose - assume the reader hasn&#39;t seen the challenge</li>
+<li>Include code snippets and command examples</li>
+<li>Explain the &quot;why&quot; not just the &quot;what&quot;</li>
+<li>Use headers and formatting to organize your thoughts</li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024-2026 Cyber Saguaros. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/plugins/jquery/jquery.js"></script>
+  <script src="/plugins/bootstrap/bootstrap.min.js"></script>
+</body>
+</html>
