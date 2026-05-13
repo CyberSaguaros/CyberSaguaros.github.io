@@ -221,315 +221,72 @@
   <script src="/plugins/jquery/jquery.js"></script>
   <script src="/plugins/bootstrap/bootstrap.min.js"></script>
   <script src="/plugins/slick/slick.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/rrule@2.8.1/dist/es5/rrule.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/luxon3@6.1.8/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/icalendar@6.1.8/index.global.min.js"></script>
   <script src="/js/script.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      // Use a same-origin cached copy of the public ICS so browser CORS doesn't block fetch.
-      const feedUrl = '/calendar/calendar.ics';
+      const TIMEZONE = 'America/Phoenix';
+      const FEED_URL = '/calendar/calendar.ics';
+      const DEFAULT_DETAILS = '<div class="event-details-label">Event Details</div><p class="event-details-empty">Click an event to view its details here.</p>';
+
       const calendarEl = document.getElementById('calendar');
       const detailsEl = document.getElementById('event-details');
-      const RRule = window.rrule.RRule;
-      const phoenixOffsetMinutes = -7 * 60;
-      let cachedEventsPromise = null;
 
-      function pad(value) {
-        return String(value).padStart(2, '0');
-      }
-
-      function unfoldLines(text) {
-        return text.replace(/\r?\n[ \t]/g, '');
-      }
-
-      function parseParams(parameterText) {
-        const params = {};
-        parameterText.split(';').forEach(function (segment) {
-          const equalsIndex = segment.indexOf('=');
-          if (equalsIndex === -1) {
-            params[segment.toUpperCase()] = true;
-            return;
-          }
-
-          const key = segment.slice(0, equalsIndex).toUpperCase();
-          const value = segment.slice(equalsIndex + 1);
-          params[key] = value;
-        });
-        return params;
-      }
-
-      function parseIcsDate(value, params) {
-        const dateMatch = value.match(/^(\d{4})(\d{2})(\d{2})$/);
-        if (dateMatch || params.VALUE === 'DATE') {
-          const parts = dateMatch || value.match(/^(\d{4})(\d{2})(\d{2})$/);
-          return {
-            allDay: true,
-            dateString: `${parts[1]}-${parts[2]}-${parts[3]}`
-          };
-        }
-
-        const dateTimeMatch = value.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})(Z?)$/);
-        if (!dateTimeMatch) {
-          return null;
-        }
-
-        const year = Number(dateTimeMatch[1]);
-        const month = Number(dateTimeMatch[2]) - 1;
-        const day = Number(dateTimeMatch[3]);
-        const hour = Number(dateTimeMatch[4]);
-        const minute = Number(dateTimeMatch[5]);
-        const second = Number(dateTimeMatch[6]);
-        const isUtc = dateTimeMatch[7] === 'Z';
-        const utcTime = Date.UTC(year, month, day, hour, minute, second);
-
-        if (isUtc) {
-          return { allDay: false, date: new Date(utcTime) };
-        }
-
-        const offsetMinutes = params.TZID === 'America/Phoenix' || !params.TZID ? phoenixOffsetMinutes : phoenixOffsetMinutes;
-        return {
-          allDay: false,
-          date: new Date(utcTime - (offsetMinutes * 60000))
-        };
-      }
-
-      function parseFeed(text) {
-        const lines = unfoldLines(text).split(/\r?\n/);
-        const events = [];
-        let currentEvent = null;
-
-        lines.forEach(function (line) {
-          if (line === 'BEGIN:VEVENT') {
-            currentEvent = { fields: {} };
-            return;
-          }
-
-          if (line === 'END:VEVENT') {
-            if (currentEvent) {
-              events.push(currentEvent);
-            }
-            currentEvent = null;
-            return;
-          }
-
-          if (!currentEvent || line.indexOf(':') === -1) {
-            return;
-          }
-
-          const colonIndex = line.indexOf(':');
-          const propText = line.slice(0, colonIndex);
-          const value = line.slice(colonIndex + 1);
-          const propParts = propText.split(';');
-          const name = propParts.shift().toUpperCase();
-          const params = {};
-
-          propParts.forEach(function (part) {
-            const parsed = parseParams(part);
-            Object.assign(params, parsed);
-          });
-
-          currentEvent.fields[name] = { value: value, params: params };
-        });
-
-        return events;
-      }
-
-      function addDays(dateString, days) {
-        const date = new Date(`${dateString}T12:00:00Z`);
-        date.setUTCDate(date.getUTCDate() + days);
-        return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())}`;
-      }
-
-      function formatDisplayDate(start, end, allDay) {
-        if (allDay) {
-          const startLabel = new Date(`${start}T12:00:00Z`).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-            timeZone: 'America/Phoenix'
-          });
-
-          if (!end) {
-            return startLabel;
-          }
-
-          const endLabel = new Date(`${end}T12:00:00Z`).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-            timeZone: 'America/Phoenix'
-          });
-
-          return `${startLabel} - ${endLabel}`;
+      function formatRange(event) {
+        if (event.allDay) {
+          const opts = { month: 'short', day: 'numeric', year: 'numeric', timeZone: TIMEZONE };
+          const startLabel = event.start.toLocaleDateString('en-US', opts);
+          if (!event.end) return startLabel;
+          // FullCalendar reports exclusive end for all-day events; subtract a day for display.
+          const inclusiveEnd = new Date(event.end.getTime() - 24 * 60 * 60 * 1000);
+          const endLabel = inclusiveEnd.toLocaleDateString('en-US', opts);
+          return startLabel === endLabel ? startLabel : startLabel + ' – ' + endLabel;
         }
 
         return new Intl.DateTimeFormat('en-US', {
-          month: 'short',
-          day: 'numeric',
-          hour: 'numeric',
-          minute: '2-digit',
-          timeZone: 'America/Phoenix'
-        }).format(new Date(start));
+          month: 'short', day: 'numeric', year: 'numeric',
+          hour: 'numeric', minute: '2-digit', timeZone: TIMEZONE
+        }).format(event.start);
       }
 
-      function detailsMarkup(eventData) {
+      function renderDetails(event) {
+        const props = event.extendedProps || {};
+        const description = props.description
+          ? String(props.description).replace(/\\n/g, '<br />').replace(/\n/g, '<br />')
+          : '';
+
         const lines = [];
-        lines.push('<div class="event-details-label">' + (eventData.allDay ? 'All day event' : 'Scheduled event') + '</div>');
-        lines.push('<div class="event-details-title">' + eventData.title + '</div>');
-        lines.push('<div class="event-details-meta">' + formatDisplayDate(eventData.startDisplay, eventData.endDisplay, eventData.allDay) + '</div>');
-
-        if (eventData.location) {
-          lines.push('<div class="event-details-body"><strong>Location:</strong> ' + eventData.location + '</div>');
+        lines.push('<div class="event-details-label">' + (event.allDay ? 'All day event' : 'Scheduled event') + '</div>');
+        lines.push('<div class="event-details-title">' + event.title + '</div>');
+        lines.push('<div class="event-details-meta">' + formatRange(event) + '</div>');
+        if (props.location) {
+          lines.push('<div class="event-details-body"><strong>Location:</strong> ' + props.location + '</div>');
         }
-
-        if (eventData.description) {
-          lines.push('<div class="event-details-body" style="margin-top: 0.75rem;">' + eventData.description + '</div>');
+        if (description) {
+          lines.push('<div class="event-details-body" style="margin-top: 0.75rem;">' + description + '</div>');
         }
-
-        return lines.join('');
-      }
-
-      function createEventRecord(source, occurrenceStart, occurrenceEnd, allDay) {
-        const startValue = allDay ? occurrenceStart : occurrenceStart.toISOString();
-        const endValue = allDay ? occurrenceEnd : occurrenceEnd.toISOString();
-
-        return {
-          id: source.uid,
-          title: source.summary,
-          start: allDay ? startValue : occurrenceStart,
-          end: allDay ? endValue : occurrenceEnd,
-          allDay: allDay,
-          extendedProps: {
-            location: source.location,
-            description: source.description,
-            startDisplay: startValue,
-            endDisplay: endValue
-          }
-        };
-      }
-
-      function expandFeedEvent(source, rangeStart, rangeEnd) {
-        const instances = [];
-        const startField = source.fields.DTSTART;
-        const endField = source.fields.DTEND;
-        const ruleField = source.fields.RRULE;
-        const summaryField = source.fields.SUMMARY;
-        const descriptionField = source.fields.DESCRIPTION;
-        const locationField = source.fields.LOCATION;
-        const uidField = source.fields.UID;
-
-        if (!startField || !summaryField) {
-          return instances;
-        }
-
-        const startValue = parseIcsDate(startField.value, startField.params);
-        if (!startValue) {
-          return instances;
-        }
-
-        const summary = summaryField.value.replace(/\\,/g, ',').replace(/\\;/g, ';');
-        const description = descriptionField ? descriptionField.value.replace(/\\n/g, '<br />').replace(/\n/g, '<br />') : '';
-        const location = locationField ? locationField.value.replace(/\\,/g, ',').replace(/\\;/g, ';') : '';
-        const uid = uidField ? uidField.value : `${summary}-${startField.value}`;
-        const hasRule = Boolean(ruleField);
-
-        if (!hasRule) {
-          if (startValue.allDay) {
-            const endValue = endField ? parseIcsDate(endField.value, endField.params) : null;
-            const startDate = startValue.dateString;
-            const endDate = endValue && endValue.allDay ? endValue.dateString : addDays(startDate, 1);
-            const overlap = startDate < rangeEnd.toISOString().slice(0, 10) && endDate > rangeStart.toISOString().slice(0, 10);
-
-            if (overlap) {
-              instances.push(createEventRecord({ uid, summary, description, location }, startDate, endDate, true));
-            }
-          } else {
-            const startDate = startValue.date;
-            const endValue = endField ? parseIcsDate(endField.value, endField.params) : null;
-            const durationMs = endValue && !endValue.allDay ? (endValue.date.getTime() - startDate.getTime()) : (60 * 60 * 1000);
-            const endDate = new Date(startDate.getTime() + durationMs);
-            if (startDate < rangeEnd && endDate > rangeStart) {
-              instances.push(createEventRecord({ uid, summary, description, location }, startDate, endDate, false));
-            }
-          }
-
-          return instances;
-        }
-
-        const recurrence = RRule.parseString(ruleField.value);
-        recurrence.dtstart = startValue.allDay ? new Date(`${startValue.dateString}T12:00:00Z`) : startValue.date;
-        const rule = new RRule(recurrence);
-        const dates = rule.between(rangeStart, rangeEnd, true);
-        const endValue = endField ? parseIcsDate(endField.value, endField.params) : null;
-        const durationMs = startValue.allDay
-          ? 24 * 60 * 60 * 1000
-          : (endValue && !endValue.allDay ? (endValue.date.getTime() - startValue.date.getTime()) : (60 * 60 * 1000));
-
-        dates.forEach(function (occurrenceStart) {
-          if (startValue.allDay) {
-            const occurrenceDay = occurrenceStart.toISOString().slice(0, 10);
-            const occurrenceEndDay = addDays(occurrenceDay, durationMs / (24 * 60 * 60 * 1000));
-            instances.push(createEventRecord({ uid, summary, description, location }, occurrenceDay, occurrenceEndDay, true));
-            return;
-          }
-
-          const occurrenceEnd = new Date(occurrenceStart.getTime() + durationMs);
-          instances.push(createEventRecord({ uid, summary, description, location }, occurrenceStart, occurrenceEnd, false));
-        });
-
-        return instances;
-      }
-
-      function renderDetails(eventApi) {
-        const props = eventApi.extendedProps || {};
-        detailsEl.innerHTML = detailsMarkup({
-          title: eventApi.title,
-          allDay: eventApi.allDay,
-          startDisplay: props.startDisplay || eventApi.start,
-          endDisplay: props.endDisplay || eventApi.end,
-          location: props.location,
-          description: props.description
-        });
-      }
-
-      async function loadEvents(rangeStart, rangeEnd) {
-        if (!cachedEventsPromise) {
-          cachedEventsPromise = fetch(feedUrl)
-            .then(function (response) {
-              if (!response.ok) {
-                throw new Error(`Calendar feed request failed with ${response.status}`);
-              }
-              return response.text();
-            })
-            .then(function (feedText) {
-              return parseFeed(feedText);
-            });
-        }
-
-        const feedEvents = await cachedEventsPromise;
-        return feedEvents.flatMap(function (event) {
-          return expandFeedEvent(event, rangeStart, rangeEnd);
-        });
+        detailsEl.innerHTML = lines.join('');
       }
 
       const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         themeSystem: 'standard',
         height: 'auto',
-        timeZone: 'America/Phoenix',
+        timeZone: TIMEZONE,
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
           right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
-        events: async function (info, successCallback, failureCallback) {
-          try {
-            const events = await loadEvents(info.start, info.end);
-            successCallback(events);
-          } catch (error) {
-            console.error(error);
+        events: {
+          url: FEED_URL,
+          format: 'ics',
+          failure: function () {
             detailsEl.innerHTML = '<div class="event-details-label">Calendar unavailable</div><p class="event-details-empty">We could not load the Google Calendar feed right now.</p>';
-            failureCallback(error);
           }
         },
         eventClick: function (info) {
@@ -537,7 +294,7 @@
           renderDetails(info.event);
         },
         datesSet: function () {
-          detailsEl.innerHTML = '<div class="event-details-label">Event Details</div><p class="event-details-empty">Click an event to view its details here.</p>';
+          detailsEl.innerHTML = DEFAULT_DETAILS;
         }
       });
 
