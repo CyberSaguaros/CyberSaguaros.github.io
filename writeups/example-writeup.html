@@ -26,6 +26,17 @@
       background-color: #181825;
     }
 
+    /* Force navbar/link colors to match site header even if external CSS didn't load */
+    .navigation, .navbar {
+      background-color: #181825 !important;
+    }
+    .navbar-brand, .nav-link {
+      color: #cdd6f4 !important;
+    }
+    .nav-link:hover, .navbar-brand:hover {
+      color: #d8bafc !important;
+    }
+
     .writeup-container {
       max-width: 900px;
       margin: 3rem auto;
