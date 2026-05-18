@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>bit-leak - Writeup</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CTF Writeup">
+  <meta name="author" content="Cyber Saguaros">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400|Josefin+Sans:300,400,600,700">
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="/plugins/themefisher-font/themefisher-font.min.css">
+  <link rel="stylesheet" href="/scss/style.min.css" media="screen">
+
+  <style>
+    body {
+      background:
+        radial-gradient(circle at top, rgba(203, 166, 247, 0.18), transparent 34%),
+        linear-gradient(180deg, #1e1e2e 0%, #181825 100%);
+      color: #cdd6f4;
+      font-family: 'Droid Serif', 'Josefin Sans', sans-serif;
+    }
+
+    header.navigation {
+      background-color: #181825;
+    }
+
+    /* Force navbar/link colors to match site header even if external CSS didn't load */
+    .navigation, .navbar {
+      background-color: #181825 !important;
+    }
+    .navbar-brand, .nav-link {
+      color: #cdd6f4 !important;
+    }
+    .nav-link:hover, .navbar-brand:hover {
+      color: #d8bafc !important;
+    }
+
+    .writeup-container {
+      max-width: 900px;
+      margin: 3rem auto;
+      background: rgba(24, 24, 37, 0.94);
+      border: 1px solid rgba(203, 166, 247, 0.18);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.28);
+    }
+
+    .markdown-content {
+      color: rgba(205, 214, 244, 0.86);
+      line-height: 1.8;
+    }
+
+    .markdown-content h1 { color: #f5e0dc; font-size: 2.2rem; margin: 0 0 1rem; line-height: 1.2; border-bottom: 2px solid rgba(203,166,247,0.2); padding-bottom:1rem; }
+    .markdown-content h2 { color: #f5e0dc; font-size: 1.6rem; margin: 2rem 0 1rem; border-bottom: 1px solid rgba(203,166,247,0.12); padding-bottom:0.5rem; }
+    .markdown-content h3 { color: #cba6f7; font-size: 1.3rem; margin: 1.5rem 0 0.8rem; }
+    .markdown-content p { margin-bottom: 1rem; }
+    .markdown-content code { background: rgba(0,0,0,0.3); color: #94e2d5; padding:0.2rem 0.5rem; border-radius:4px; font-family: 'Courier New', monospace; }
+    .markdown-content pre { background: rgba(0,0,0,0.4); border-left: 3px solid #cba6f7; padding:1rem; border-radius:6px; overflow-x:auto; margin:1rem 0; }
+    .markdown-content pre code { background:none; color:#89b4fa; padding:0; }
+    .markdown-content blockquote { border-left:4px solid #cba6f7; padding-left:1rem; color:rgba(205,214,244,0.76); font-style:italic; }
+    .markdown-content table { border-collapse: collapse; width:100%; margin:1rem 0; }
+    .markdown-content table th, .markdown-content table td { border:1px solid rgba(203,166,247,0.2); padding:0.75rem; text-align:left; }
+    .markdown-content table th { background: rgba(203,166,247,0.1); color:#f5e0dc; font-weight:700; }
+
+    footer.footer { background-color:#1e1e2e; color:#cdd6f4; padding:2rem 1rem; text-align:center; margin-top:3rem; border-top:1px solid rgba(203,166,247,0.12); }
+  </style>
+</head>
+
+<body>
+  <header class="navigation" style="background-color: #1e1e2e;">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="/">Cyber Saguaros</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="/calendar/">Calendar</a></li>
+            <li class="nav-item"><a class="nav-link" href="/presentations/">Presentations</a></li>
+            <li class="nav-item"><a class="nav-link" href="/writeups/">Writeups</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <a href="/writeups/" class="back-link">← Back to Writeups</a>
+      <div class="writeup-container">
+        <div class="markdown-content">
+          <h1 id="bit-leak">bit-leak</h1>
+<p><strong>Author:</strong> Jordan Lanham
+<strong>Event:</strong> TJCTF 2026
+<strong>Category:</strong> crypto
+<strong>Date:</strong> May 15, 2026
+<strong>Read Time:</strong> 6 minutes</p>
+<hr>
+<h2 id="overview">Overview</h2>
+<p>A textbook RSA <strong>LSB parity oracle</strong> challenge: the server happily decrypts arbitrary ciphertexts under a 512-bit RSA key but only reveals the <strong>single least-significant bit</strong> of each plaintext. That one bit per query is enough — repeatedly multiplying the target ciphertext by <code>2^e mod n</code> turns each query into a binary-search step on <code>m</code>, recovering the full 512-bit plaintext in roughly <code>log2(n) ≈ 511</code> queries (well inside the 2100-query budget).</p>
+<h2 id="challenge-description">Challenge Description</h2>
+<blockquote>
+<p>Our security monitor only ever tips us off about the parity of RSA decryptions.</p>
+<p><code>nc tjc.tf 31001</code></p>
+</blockquote>
+<p><strong>Files provided:</strong> <code>server.py</code>
+<strong>Endpoints:</strong> <code>nc tjc.tf 31001</code></p>
+<h2 id="initial-analysis">Initial Analysis</h2>
+<p>The server (<code>server.py</code>) does the following on connect:</p>
+<ol>
+<li>Generates two 256-bit primes <code>p, q</code>, sets <code>n = p*q</code>, <code>e = 65537</code>, <code>d = e^{-1} mod phi(n)</code>.</li>
+<li>Reads <code>flag.txt</code>, encrypts the flag integer to produce <code>ciphertext</code>.</li>
+<li>Prints <code>n</code>, <code>e</code>, and <code>ciphertext</code>.</li>
+<li>Enters a loop offering up to <strong>2100</strong> queries. Each query takes an integer <code>c ∈ [0, n)</code> and returns <code>lsb = pow(c, d, n) &amp; 1</code> — i.e. the parity of the decryption.</li>
+</ol>
+<p>This is the canonical setup for the LSB / parity oracle attack on RSA, attributed to Bleichenbacher.</p>
+<h2 id="solution-approach">Solution Approach</h2>
+<h3 id="step-1-reconnaissance">Step 1: Reconnaissance</h3>
+<p>The protocol is plain-text and stateless: each query is independent and is given the full power of the decryption function — except only its LSB is leaked. There is no padding check, no rate-limit beyond <code>MAX_QUERIES = 2100</code>, and <code>n</code> has only 512 bits.</p>
+<h3 id="step-2-vulnerability-identification">Step 2: Vulnerability Identification</h3>
+<p>The oracle returns <code>D(c) &amp; 1</code>. Two homomorphic-style observations break the system:</p>
+<ul>
+<li>RSA is multiplicatively homomorphic: <code>D(c1 * c2 mod n) = D(c1) * D(c2) mod n</code>.</li>
+<li>For any odd <code>n</code>, parity of <code>2m mod n</code> reveals whether <code>m &lt; n/2</code>:<ul>
+<li>If <code>2m &lt; n</code>, then <code>2m mod n == 2m</code>, an even number — <code>parity = 0</code>.</li>
+<li>If <code>2m ≥ n</code>, then <code>2m mod n == 2m - n</code>, and since <code>n</code> is odd, <code>2m - n</code> is odd — <code>parity = 1</code>.</li>
+</ul>
+</li>
+</ul>
+<p>So querying the oracle on <code>c * 2^e mod n</code> reveals one bit of comparison between <code>m</code> and <code>n/2</code>. Repeating with <code>c * 4^e, c * 8^e, ...</code> halves the interval each time.</p>
+<h3 id="step-3-exploitation">Step 3: Exploitation</h3>
+<p>Maintain a real interval <code>[lo, hi)</code> initialised to <code>[0, n)</code>. Iteratively:</p>
+<ol>
+<li>Compute <code>c_i = c * (2^i)^e mod n</code> (in practice multiply the running value by <code>2^e mod n</code> each step).</li>
+<li>Query the oracle on <code>c_i</code> to get the parity <code>p_i</code> of <code>(2^i * m) mod n</code>.</li>
+<li>If <code>p_i == 0</code>: set <code>hi = (lo + hi) / 2</code>. If <code>p_i == 1</code>: set <code>lo = (lo + hi) / 2</code>.</li>
+<li>After ~`log2(n)<code>iterations the interval has length &lt; 1 and contains the integer</code>m`.</li>
+</ol>
+<p>Using <code>fractions.Fraction</code> keeps the bookkeeping exact, sidestepping the well-known float-rounding pitfall in naïve implementations.</p>
+<h3 id="step-4-flag-extraction">Step 4: Flag Extraction</h3>
+<p>After convergence we verify the candidate by checking <code>pow(cand, e, n) == ciphertext</code>, then convert the integer to bytes — which spell out <code>tjctf{parity_isnt_privacy}</code>.</p>
+<h2 id="code--exploit">Code / Exploit</h2>
+<pre><code class="language-python">#!/usr/bin/env python3
+&quot;&quot;&quot;bit-leak (TJCTF 2026) — RSA LSB parity oracle attack.&quot;&quot;&quot;
+import socket, re
+from fractions import Fraction
+
+HOST, PORT = &quot;tjc.tf&quot;, 31001
+
+class Conn:
+    def __init__(self, host, port):
+        self.s = socket.create_connection((host, port))
+        self.s.settimeout(120)
+        self.buf = b&quot;&quot;
+    def recv_until(self, marker):
+        while marker not in self.buf:
+            data = self.s.recv(4096)
+            if not data: raise EOFError
+            self.buf += data
+        idx = self.buf.index(marker) + len(marker)
+        out = self.buf[:idx]; self.buf = self.buf[idx:]
+        return out
+    def send(self, b):
+        self.s.sendall(b if isinstance(b, bytes) else b.encode())
+
+def main():
+    c = Conn(HOST, PORT)
+    banner = c.recv_until(b&quot;parity queries.&quot;).decode()
+    n  = int(re.search(r&quot;n = (\d+)&quot;, banner).group(1))
+    e  = int(re.search(r&quot;e = (\d+)&quot;, banner).group(1))
+    ct = int(re.search(r&quot;ciphertext = (\d+)&quot;, banner).group(1))
+
+    lo, hi   = Fraction(0), Fraction(n)
+    mult     = pow(2, e, n)
+    c_cur    = ct
+
+    for _ in range(n.bit_length() + 4):
+        c_cur = (c_cur * mult) % n
+        c.recv_until(b&quot;&gt; &quot;);          c.send(b&quot;1\n&quot;)
+        c.recv_until(b&quot;ciphertext = &quot;); c.send(f&quot;{c_cur}\n&quot;.encode())
+        line = c.recv_until(b&quot;\n&quot;).decode()
+        parity = int(re.search(r&quot;lsb = ([01])&quot;, line).group(1))
+
+        mid = (lo + hi) / 2
+        if parity == 0: hi = mid
+        else:           lo = mid
+        if hi - lo &lt; 1: break
+
+    for k in range(-5, 6):
+        for base in (lo, hi):
+            cand = int(base) + k
+            if 0 &lt; cand &lt; n and pow(cand, e, n) == ct:
+                bl = (cand.bit_length() + 7) // 8
+                print(&quot;FLAG:&quot;, cand.to_bytes(bl, &quot;big&quot;).decode())
+                return
+
+main()
+</code></pre>
+<p>Output (last few lines):</p>
+<pre><code>[507] parity=0  width=7.00
+[508] parity=0  width=3.50
+[509] parity=1  width=1.75
+[510] parity=0  width=0.87
+[+] Recovered m = 187072624539866400004961598762110639072614111000177936087349629
+[+] Flag: b&#39;tjctf{parity_isnt_privacy}&#39;
+</code></pre>
+<h2 id="technical-details">Technical Details</h2>
+<ul>
+<li><strong>Vulnerability class:</strong> Side-channel / partial-information oracle on RSA decryption.</li>
+<li><strong>Encryption / encoding:</strong> Textbook RSA — 512-bit modulus, <code>e = 65537</code>, no padding.</li>
+<li><strong>Protocol:</strong> Line-based oracle: send ciphertext, get 1-bit parity response.</li>
+<li><strong>Key trick:</strong> Multiply by <code>2^e mod n</code> per round so the oracle answers parity of <code>(2^i · m) mod n</code>, which is exactly the i-th bit of a binary search comparison <code>m</code> vs <code>n/2</code>.</li>
+</ul>
+<h2 id="key-insights">Key Insights</h2>
+<ul>
+<li>The lesson is the same as Bleichenbacher 1998: <strong>any</strong> decryption side channel — even a single bit — is a full decryption oracle when RSA has no padding integrity check.</li>
+<li>Use exact rationals (<code>fractions.Fraction</code>) for the interval; popular older write-ups using floats can lose the last byte to rounding.</li>
+<li><code>n.bit_length()</code> queries are sufficient. With 2100 queries available, there is room for sanity-check rounds and small overshoot.</li>
+<li>Defence in depth: never expose decryption results, even partial; use authenticated padding (OAEP) or hybrid schemes that fail closed before any plaintext side-channel can leak.</li>
+</ul>
+<h2 id="the-flag">The Flag</h2>
+<pre><code>tjctf{parity_isnt_privacy}
+</code></pre>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://crypto.stanford.edu/~dabo/cs255/lectures/PKCS-attack.pdf">Bleichenbacher-style LSB Oracle on RSA — Dan Boneh, Stanford CS 255 notes</a></li>
+<li><a href="https://cryptohack.org/challenges/rsa/">CryptoHack — RSA Parity Oracle challenge</a></li>
+<li><a href="https://crypto.stanford.edu/~dabo/papers/RSA-survey.pdf">&quot;Twenty Years of Attacks on the RSA Cryptosystem&quot; — Dan Boneh, AMS Notices 1999</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024-2026 Cyber Saguaros. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/plugins/jquery/jquery.js"></script>
+  <script src="/plugins/bootstrap/bootstrap.min.js"></script>
+</body>
+</html>

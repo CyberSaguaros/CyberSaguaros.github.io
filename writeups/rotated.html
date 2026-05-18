@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <title>rotated - Writeup</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CTF Writeup">
+  <meta name="author" content="Cyber Saguaros">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400|Josefin+Sans:300,400,600,700">
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="/plugins/themefisher-font/themefisher-font.min.css">
+  <link rel="stylesheet" href="/scss/style.min.css" media="screen">
+
+  <style>
+    body {
+      background:
+        radial-gradient(circle at top, rgba(203, 166, 247, 0.18), transparent 34%),
+        linear-gradient(180deg, #1e1e2e 0%, #181825 100%);
+      color: #cdd6f4;
+      font-family: 'Droid Serif', 'Josefin Sans', sans-serif;
+    }
+
+    header.navigation {
+      background-color: #181825;
+    }
+
+    /* Force navbar/link colors to match site header even if external CSS didn't load */
+    .navigation, .navbar {
+      background-color: #181825 !important;
+    }
+    .navbar-brand, .nav-link {
+      color: #cdd6f4 !important;
+    }
+    .nav-link:hover, .navbar-brand:hover {
+      color: #d8bafc !important;
+    }
+
+    .writeup-container {
+      max-width: 900px;
+      margin: 3rem auto;
+      background: rgba(24, 24, 37, 0.94);
+      border: 1px solid rgba(203, 166, 247, 0.18);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.28);
+    }
+
+    .markdown-content {
+      color: rgba(205, 214, 244, 0.86);
+      line-height: 1.8;
+    }
+
+    .markdown-content h1 { color: #f5e0dc; font-size: 2.2rem; margin: 0 0 1rem; line-height: 1.2; border-bottom: 2px solid rgba(203,166,247,0.2); padding-bottom:1rem; }
+    .markdown-content h2 { color: #f5e0dc; font-size: 1.6rem; margin: 2rem 0 1rem; border-bottom: 1px solid rgba(203,166,247,0.12); padding-bottom:0.5rem; }
+    .markdown-content h3 { color: #cba6f7; font-size: 1.3rem; margin: 1.5rem 0 0.8rem; }
+    .markdown-content p { margin-bottom: 1rem; }
+    .markdown-content code { background: rgba(0,0,0,0.3); color: #94e2d5; padding:0.2rem 0.5rem; border-radius:4px; font-family: 'Courier New', monospace; }
+    .markdown-content pre { background: rgba(0,0,0,0.4); border-left: 3px solid #cba6f7; padding:1rem; border-radius:6px; overflow-x:auto; margin:1rem 0; }
+    .markdown-content pre code { background:none; color:#89b4fa; padding:0; }
+    .markdown-content blockquote { border-left:4px solid #cba6f7; padding-left:1rem; color:rgba(205,214,244,0.76); font-style:italic; }
+    .markdown-content table { border-collapse: collapse; width:100%; margin:1rem 0; }
+    .markdown-content table th, .markdown-content table td { border:1px solid rgba(203,166,247,0.2); padding:0.75rem; text-align:left; }
+    .markdown-content table th { background: rgba(203,166,247,0.1); color:#f5e0dc; font-weight:700; }
+
+    footer.footer { background-color:#1e1e2e; color:#cdd6f4; padding:2rem 1rem; text-align:center; margin-top:3rem; border-top:1px solid rgba(203,166,247,0.12); }
+  </style>
+</head>
+
+<body>
+  <header class="navigation" style="background-color: #1e1e2e;">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="/">Cyber Saguaros</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="/calendar/">Calendar</a></li>
+            <li class="nav-item"><a class="nav-link" href="/presentations/">Presentations</a></li>
+            <li class="nav-item"><a class="nav-link" href="/writeups/">Writeups</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <a href="/writeups/" class="back-link">← Back to Writeups</a>
+      <div class="writeup-container">
+        <div class="markdown-content">
+          <h1 id="rotated">rotated</h1>
+<p><strong>Author:</strong> Jordan Lanham
+<strong>Event:</strong> TJCTF 2026
+<strong>Category:</strong> rev
+<strong>Date:</strong> May 16, 2026
+<strong>Read Time:</strong> 6 minutes</p>
+<hr>
+<h2 id="overview">Overview</h2>
+<p>A 6480-byte &quot;data&quot; blob whose every byte has been <strong>shifted up by <code>+0x1d</code></strong> (modulo 256). The challenge name &quot;rotated&quot; was a red herring pointing at bit rotations; the real transform is an <strong>additive Caesar shift over the whole byte space (mod 256)</strong>. Subtracting <code>0x1d</code> from each byte reveals a UPX-packed x86-64 ELF. Unpacking with <code>upx -d</code> yields a tiny Linux binary that <code>write()</code>s a bash <code>script.sh</code> containing a heavily obfuscated one-liner. Cleaning the obfuscation leaves <code>printf &#39;&lt;base64&gt;&#39; | base64 -d | gunzip -c</code>, and the gunzipped payload contains <code>echo &quot;Looking for a flag?&quot; # &lt;base64-flag&gt;</code>. Decoding that comment yields the flag.</p>
+<h2 id="challenge-description">Challenge Description</h2>
+<blockquote>
+<p>this file isn&#39;t making any sense to me. can you discover what it means?
+hint: look at the title
+hint 2: consider each byte separately</p>
+</blockquote>
+<p><strong>Files provided:</strong> <code>chall</code> (6480 bytes, <code>file</code> reports it as <code>data</code>)
+<strong>Endpoints:</strong> —</p>
+<h2 id="initial-analysis">Initial Analysis</h2>
+<p><code>xxd</code> on <code>chall</code>:</p>
+<pre><code>00000000: 9c62 6963 1f1e 1e1d 1d1d 1d1d 1d1d 1d1d
+00000010: 201d 5b1d 1e1d 1d1d e575 1d1d 1d1d 1d1d
+...
+00000110: 9c62 6963 1f1e 1e1d 201d 5b1d 2aad 2d2c
+</code></pre>
+<p>Frequency analysis: byte <code>0x1d</code> appears 644 times (~10%), followed by <code>0x1c</code>, <code>0x65</code>, <code>0x24</code>, <code>0x2c</code>, <code>0x1e</code>, <code>0x20</code>, <code>0x1f</code>. There are also two identical 7-byte headers (<code>9c 62 69 63 1f 1e 1e</code>) at offsets <code>0x000</code> and <code>0x110</code> — a strong UPX tell (UPX prepends a small custom header twice in the packed binary).</p>
+<p>The title &quot;rotated&quot; and hint &quot;consider each byte separately&quot; strongly suggest a per-byte transform. The earlier (failed) attempt brute-forced bit rotations (rol/ror by every reasonable key) — none of them produced printable text.</p>
+<h2 id="solution-approach">Solution Approach</h2>
+<h3 id="step-1-reconnaissance--spot-the-caesar-shift">Step 1: Reconnaissance — Spot the Caesar Shift</h3>
+<p>The dominant byte <code>0x1d</code> is suspicious. <code>0x1d - 0x1d = 0x00</code>, and <code>0x00</code> is the most common byte in nearly every ELF (large stretches of zero padding). That is the giveaway:</p>
+<pre><code class="language-python">out = bytes((b - 0x1d) % 256 for b in data)
+out[:4]  # b&#39;\x7fELF&#39;
+</code></pre>
+<p>Subtracting <code>0x1d</code> from every byte produces a perfect ELF magic <code>7f 45 4c 46</code> at offset 0. The &quot;rotated&quot; in the title is <strong>rotation in the additive ring Z/256Z</strong>, not bit rotation — i.e., <code>chall[i] = (real[i] + 0x1d) mod 256</code>. Every byte has been Caesar-shifted by 29.</p>
+<p>That also explains the &quot;bic&quot; ASCII teaser at offset 1: <code>0x62 - 0x1d = 0x45 (&#39;E&#39;)</code>, <code>0x69 - 0x1d = 0x4c (&#39;L&#39;)</code>, <code>0x63 - 0x1d = 0x46 (&#39;F&#39;)</code> → &quot;ELF&quot;.</p>
+<h3 id="step-2-unpack-upx">Step 2: Unpack UPX</h3>
+<p><code>file rotated_decoded.elf</code> →</p>
+<pre><code>ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), statically linked, no section header
+</code></pre>
+<p><code>strings</code> shows <code>UPX!</code> near the top and <code>script.sh</code>, <code>#!/bin/bash</code>, and a base64 string. So this is UPX-packed.</p>
+<pre><code class="language-bash">upx -d files/rotated_decoded.elf -o files/rotated_unpacked.elf
+# Unpacked 1 file. 6480 -&gt; 16152 bytes
+</code></pre>
+<p>After unpacking: <code>ELF 64-bit LSB pie executable, dynamically linked, ... not stripped, main present</code>.</p>
+<h3 id="step-3-recover-the-embedded-bash-script">Step 3: Recover the Embedded Bash Script</h3>
+<p><code>strings</code> on the unpacked binary reveals an in-memory shell script the program writes to <code>script.sh</code>:</p>
+<pre><code class="language-bash">#!/bin/bash
+   ${*,} ${@//nj2p#@$\!/^Bis\X}  e\val   &quot;$(      ${*#+*=\`gr4#}  ${*~~}   &#39;p&#39;r\i&quot;n&quot;tf &#39;H4sIAEDAzmkC/0tNzshXUPLJz8/OzEtXSMsvUkhUSMtJTLdXUlBWSHEvyEpxjzKPzAo0THSzzPY18jL0y7Es8XMJNfY19rJ0Tre1BQCGqZA9QQAAAA==&#39;  ${!*} | ${*%b:d\)} b&quot;&quot;&#39;a&#39;&#39;&#39;s&quot;e&quot;6&quot;${@^^}&quot;4  -d   ${*}  |  ${*//\`FsXY^F} ${*#0ms7JMci}  \gu${*//.Km\`1B/vmdvatBX}n$&#39;\172&#39;&#39;i&#39;p  -c  ${*,,}      )&quot;  ${*%TB.h}
+</code></pre>
+<p>This is a classic bash de-obfuscation puzzle. Strip every <code>${*...}</code>, <code>${@...}</code>, <code>${!*}</code> parameter expansion (they all expand to the empty string when the script is run with no arguments), strip the backslash/quote noise inside the words, and the script collapses to:</p>
+<pre><code class="language-bash">eval &quot;$( printf &#39;&lt;base64&gt;&#39; | base64 -d | gunzip -c )&quot;
+</code></pre>
+<p>The flag string &quot;<strong>b</strong>4<strong>sh</strong> <strong>d</strong>3<strong>bu</strong>6 <strong>m</strong>4573<strong>r</strong>&quot; matches this exactly — it&#39;s a bash-deobfuscation problem.</p>
+<h3 id="step-4-decode-the-payload">Step 4: Decode the Payload</h3>
+<pre><code class="language-python">import base64, gzip
+b64 = &#39;H4sIAEDAzmkC/0tNzshXUPLJz8/OzEtXSMsvUkhUSMtJTLdXUlBWSHEvyEpxjzKPzAo0THSzzPY18jL0y7Es8XMJNfY19rJ0Tre1BQCGqZA9QQAAAA==&#39;
+inner = gzip.decompress(base64.b64decode(b64))
+# b&#39;echo &quot;Looking for a flag?&quot; # dGpjdGZ7YjQ1aF9kM2J1Nl9tNDU3M3J9Cg==&#39;
+print(base64.b64decode(&#39;dGpjdGZ7YjQ1aF9kM2J1Nl9tNDU3M3J9Cg==&#39;).decode())
+# tjctf{b45h_d3bu6_m4573r}
+</code></pre>
+<p>The <code>eval</code> body is <code>echo &quot;Looking for a flag?&quot; # &lt;base64&gt;</code> — a bash comment. The flag is hiding <strong>in the comment</strong> of the deobfuscated script, base64-encoded.</p>
+<h2 id="code--exploit">Code / Exploit</h2>
+<pre><code class="language-python">#!/usr/bin/env python3
+&quot;&quot;&quot;TJCTF 2026 - rotated solver.&quot;&quot;&quot;
+import base64, gzip, subprocess, pathlib, re
+
+data = pathlib.Path(&#39;files/rotated__chall&#39;).read_bytes()
+
+# Step 1: Caesar shift by -0x1d (the title &quot;rotated&quot; = additive rotation in Z/256Z)
+shifted = bytes((b - 0x1d) % 256 for b in data)
+pathlib.Path(&#39;files/rotated_decoded.elf&#39;).write_bytes(shifted)
+assert shifted[:4] == b&#39;\x7fELF&#39;, &#39;not an ELF after shift&#39;
+
+# Step 2: UPX unpack
+subprocess.run([&#39;upx&#39;, &#39;-d&#39;, &#39;files/rotated_decoded.elf&#39;,
+                &#39;-o&#39;, &#39;files/rotated_unpacked.elf&#39;], check=True)
+
+# Step 3: extract the embedded base64 from the binary&#39;s strings
+unpacked = pathlib.Path(&#39;files/rotated_unpacked.elf&#39;).read_bytes()
+b64 = re.search(rb&quot;H4sI[A-Za-z0-9+/=]{40,}&quot;, unpacked).group().decode()
+
+# Step 4: gunzip -&gt; strip &#39;echo ... # &lt;inner-b64&gt;&#39; -&gt; base64-decode -&gt; flag
+inner = gzip.decompress(base64.b64decode(b64)).decode()
+flag_b64 = inner.split(&#39;# &#39;, 1)[1].strip()
+print(base64.b64decode(flag_b64).decode())  # tjctf{b45h_d3bu6_m4573r}
+</code></pre>
+<h2 id="technical-details">Technical Details</h2>
+<ul>
+<li><strong>Vulnerability class:</strong> Reverse engineering — multi-layer obfuscation (additive cipher -&gt; UPX pack -&gt; bash quote-obfuscation -&gt; base64+gzip -&gt; bash comment).</li>
+<li><strong>Encryption / encoding:</strong> Per-byte additive shift by <code>+0x1d</code> (mod 256). UPX compression. Base64 + gzip. Base64 again on the inner flag.</li>
+<li><strong>Protocol:</strong> Static file.</li>
+<li><strong>Key trick:</strong> Recognizing that <code>0x1d</code> being the dominant byte (~10%) is the <strong>shifted form of <code>0x00</code></strong> that pads every ELF — diff-from-the-modal-byte instantly reveals the cipher offset. The &quot;rotated&quot; title misdirected toward <em>bit</em> rotation; the real operation is <em>additive</em> rotation on <code>Z/256Z</code>.</li>
+<li><strong>Why &quot;bic&quot; appeared in plaintext:</strong> <code>&#39;b&#39;,&#39;i&#39;,&#39;c&#39;</code> = <code>0x62,0x69,0x63</code> = <code>&#39;E&#39;,&#39;L&#39;,&#39;F&#39; + 0x1d</code>. The ELF magic survives as the deceptively-readable string &quot;bic&quot; because each of E/L/F + 29 lands inside printable ASCII.</li>
+</ul>
+<h2 id="key-insights">Key Insights</h2>
+<ul>
+<li><strong>&quot;Rotated&quot; can mean Caesar-shift, not just bit-rotation.</strong> When a binary file&#39;s modal byte is not <code>0x00</code> but some small value <code>k</code>, try <code>(b - k) mod 256</code> first - it&#39;s a one-liner and catches the entire class of &quot;file with every byte +k&quot; obfuscations.</li>
+<li><strong>ASCII-bait inside a binary is a clue, not noise.</strong> <code>9c bic ...</code> looked random; in fact &quot;bic&quot; was literally <code>ELF + 0x1d</code> displayed by xxd&#39;s character column. The same trick can hide other magics in plain sight.</li>
+<li><strong>UPX has its own giveaways.</strong> Two identical custom headers near each other (here at <code>0x000</code> and <code>0x110</code>) plus the dominant zero-byte once decoded is enough to predict UPX without even running <code>strings</code>.</li>
+<li><strong>Bash quote-obfuscation always collapses with no-argument expansions.</strong> Once you see <code>${*,}</code>, <code>${@^^}</code>, <code>${!*}</code>, <code>${*%foo}</code> peppered through a script you can mentally erase them all - they evaluate to empty when invoked with no positional parameters. What remains is the actual code.</li>
+<li><strong>Skipping a step costs hours.</strong> The prior attempt assumed bit rotations from the word &quot;rotated&quot; and brute-forced them; the right move was to ask &quot;what byte would be 10% of an unknown file?&quot; The answer (<code>0x00</code> -&gt; padding) makes the diff <code>0x1d</code> jump out instantly.</li>
+</ul>
+<h2 id="the-flag">The Flag</h2>
+<pre><code>tjctf{b45h_d3bu6_m4573r}
+</code></pre>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://upx.github.io/">UPX - the Ultimate Packer for eXecutables</a></li>
+<li><a href="https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html">Bash parameter expansion reference (GNU Bash manual)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format">ELF format - Wikipedia</a></li>
+<li><a href="https://en.wikipedia.org/wiki/List_of_file_signatures">List of file signatures - Wikipedia</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024-2026 Cyber Saguaros. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/plugins/jquery/jquery.js"></script>
+  <script src="/plugins/bootstrap/bootstrap.min.js"></script>
+</body>
+</html>
