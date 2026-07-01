@@ -16,24 +16,327 @@ DTSTART:19700101T000000
 END:STANDARD
 END:VTIMEZONE
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20260417
-DTEND;VALUE=DATE:20260419
-DTSTAMP:20260701T025512Z
-UID:18tp2edva6akvefhhjama1l6k9@google.com
-CREATED:20260106T195631Z
-DESCRIPTION:The theme for the 2026 competition is “AI-Enhanced Social Engin
- eering Attacks on a Community-Based Pharmacy”.
-LAST-MODIFIED:20260106T195645Z
-LOCATION:Virtual
+DTSTART:20260330T170000Z
+DTEND:20260406T010000Z
+DTSTAMP:20260701T070723Z
+UID:2rfa0nltatuhmfoerrl2rtcok1@google.com
+CREATED:20260226T185611Z
+DESCRIPTION:The Practice Game is another opportunity to practice your skill
+ s before the competitive NCL Games. Like the Gymnasium\, results will not b
+ e shown on your NCL Scouting Report.\n\nNCL Spring 2026 Practice Game is pr
+ ovided by Cyber Skyline.
+LAST-MODIFIED:20260226T185611Z
+LOCATION:https://cyberskyline.com/world/69690a38f845cf0a7e6d8b84
 SEQUENCE:0
 STATUS:CONFIRMED
-SUMMARY:CARE Lab’s 6th Annual Social Engineering Competition
+SUMMARY:NCL Spring 2026 Practice Game
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250412
+DTEND;VALUE=DATE:20250413
+DTSTAMP:20260701T070723Z
+UID:6vu4o3h6i5b23aujta9fb1nleb@google.com
+CREATED:20250329T211526Z
+LAST-MODIFIED:20260404T131017Z
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:New Student Admission Day
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;TZID=America/Phoenix:20251021T170000
+DTEND;TZID=America/Phoenix:20251021T180000
+RRULE:FREQ=MONTHLY;UNTIL=20260519T065959Z;BYDAY=3TU
+DTSTAMP:20260701T070723Z
+UID:4obvc3vmueno0fue0qgt48aq0u@google.com
+CREATED:20251023T033326Z
+DESCRIPTION:ILC RM 145
+LAST-MODIFIED:20260513T215838Z
+LOCATION:Manuel Pacheco Integrated Learning Center\, 1500 E University Blvd
+ \, Tucson\, AZ 85721\, USA
+SEQUENCE:1
+STATUS:CONFIRMED
+SUMMARY:Club Meeting
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260410T170000Z
+DTEND:20260413T010000Z
+DTSTAMP:20260701T070723Z
+UID:1rsnc8dgok8it4mqm279t6evi4@google.com
+CREATED:20260226T185643Z
+DESCRIPTION:The Individual Game will test your skills with in all 9 compete
+ ncies. The Individual Game is where individuals compete on their own\, with
+ out the assistance of others\, to solve game challenges.\n\nNCL Spring 2026
+  Individual Game is provided by Cyber Skyline.
+LAST-MODIFIED:20260226T185643Z
+LOCATION:https://cyberskyline.com/world/69690a38f845cf0a7e6d8b87
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:NCL Spring 2026 Individual Game
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250414
+DTEND;VALUE=DATE:20250415
+DTSTAMP:20260701T070723Z
+UID:77a6o6iefo5l13jtalec75v0uj@google.com
+CREATED:20250329T092841Z
+DESCRIPTION:<a href="https://bots.rba.community/" target="_blank"><u>https:
+ //bots.rba.community/</u></a><br><br><a href="https://www.eventbrite.com/e/
+ southwest-boss-of-the-soc-bots-spring-2025-tickets-1246726495509?aff=oddtdt
+ creator" target="_blank"><u>https://www.eventbrite.com/e/southwest-boss-of-
+ the-soc-bots-spring-2025-tickets-1246726495509?aff=oddtdtcreator</u></a><br
+ ><br><br>Southwest States Splunk Event: Boss of the SOC (BOTS)<br><br>Boss 
+ of the SOC (BOTS) is a cutting-edge\, team-based cybersecurity competition 
+ designed to replicate real-world challenges faced by today’s Security Opera
+ tions Centers (SOCs). Participants will work in teams to investigate\, dete
+ ct\, and respond to simulated security incidents using Splunk’s leading sec
+ urity tools. This dynamic competition fosters critical thinking\, problem-s
+ olving\, and analytical skills\, all while providing a unique learning oppo
+ rtunity.<br><br>Key Objectives:<br><ul><li>Gain hands-on experience with Sp
+ lunk’s Security Suite and other cybersecurity tools.</li><li>Learn to inves
+ tigate and respond to cybersecurity incidents in a real-time\, high-pressur
+ e environment.</li><li>Develop advanced threat detection\, investigation\, 
+ and response techniques that are immediately applicable in SOCs.</li><li>Co
+ llaborate in teams to solve complex security challenges.</li></ul>Who Shoul
+ d Attend:<br><ul><li>Students studying cybersecurity\, computer science\, o
+ r information technology.</li><li>Cybersecurity professionals looking to sh
+ arpen their SOC skills.</li><li>Educators interested in incorporating hands
+ -on cybersecurity training into their programs.</li><li>Anyone passionate a
+ bout cybersecurity and threat detection.</li></ul>
+LAST-MODIFIED:20260404T131017Z
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:BOTS CTF Registration Closes
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260309
+DTEND;VALUE=DATE:20260320
+DTSTAMP:20260701T070723Z
+UID:4tuo9ltqursq1o8aikmqqhlfnp@google.com
+CREATED:20260205T213739Z
+DESCRIPTION:Event Hub Thread:<br><a href="https://discordapp.com/channels/1
+ 165869701436559421/1469082082377728173"><br>https://discordapp.com/channels
+ /1165869701436559421/1469082082377728173</a>
+LAST-MODIFIED:20260205T213740Z
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:picoCTF 2026
+TRANSP:TRANSPARENT
+ATTACH;FILENAME=Screenshot from 2026-02-05 14-22-30.png;FMTTYPE=image/png:h
+ ttps://drive.google.com/open?id=1ytYY0MmetJvjnMhcW3uG0r-AQab3HwF7
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20250405T170000Z
+DTEND:20250406T000000Z
+DTSTAMP:20260701T070723Z
+UID:5c1l1b4hoqpo0r6v8irmhm8ij5@google.com
+CREATED:20250329T092059Z
+DESCRIPTION:<a href="https://specialevents.asu.edu/ereg/newreg.php?eventid=
+ 831251&amp\;" target="_blank">https://specialevents.asu.edu/ereg/newreg.php
+ ?eventid=831251&amp\;</a><br><br>Format: Individual Competition (no teams)<
+ br><br>Open to all Arizona undergraduates–no prior experience required!<br>
+ <br>Are you an undergraduate student interested in hacking\, and enrolled a
+ t an Arizona community college or university? Test your skills in the Arizo
+ na Capture the Flag (CTF) Competition! Hosted by Arizona State University\,
+  Grand Canyon University\, Northern Arizona University\, and the University
+  of Arizona\, this one-day cybersecurity challenge will feature hands-on ha
+ cking challenges on pwn.college.<br><br>Prizes will be awarded to the top p
+ erformers!
+LAST-MODIFIED:20260404T131017Z
+LOCATION:In-person at ASU Tempe\, NAU Flagstaff\, GCU Phoenix\, and UA Tucs
+ on with a virtual option for remote competitors
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:ASU CTF Competition
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20251107T180000Z
+DTEND:20251110T020000Z
+DTSTAMP:20260701T070723Z
+UID:4ofmnbkm207i6oc0iv1ip89ail@google.com
+CREATED:20251106T023738Z
+DESCRIPTION:Real-world cybersecurity work is often done in teams. The NCL T
+ eam Game event provides a safe and challenging environment for players to a
+ pply their knowledge and skills in a team setting.\n\n\nNCL Fall 2025 Team 
+ Game is provided by Cyber Skyline.
+LAST-MODIFIED:20251106T023738Z
+LOCATION:https://cyberskyline.com/world/684c235bdbe1ed8e2a7f7e72
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:NCL Fall 2025 Team Game
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20251027T193000Z
+DTEND:20251027T210000Z
+DTSTAMP:20260701T070723Z
+UID:6ot0lap3i9eqaqu31o0sev94al@google.com
+CREATED:20251023T235526Z
+DESCRIPTION:Join the College of Information Science at the University of Ar
+ izona for online Speaker Series: Chris Yako\, a Security Platforms Engineer
+  at State Street.
+LAST-MODIFIED:20251023T235526Z
+LOCATION:Online via Zoom
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:Guest Speaker: Chris Yako
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250812
+DTEND;VALUE=DATE:20250813
+DTSTAMP:20260701T070723Z
+UID:4tm4pidv90auggdqnolkd8m0ov@google.com
+CREATED:20250329T211658Z
+LAST-MODIFIED:20260404T131017Z
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:New Student Orientation
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260114
+DTEND;VALUE=DATE:20260115
+DTSTAMP:20260701T070723Z
+UID:4crp6s5psmst5ft0t1vf0npv44@google.com
+CREATED:20260106T195839Z
+DESCRIPTION:The Embedded Capture the Flag (eCTF) Competition is a design-bu
+ ild-attack-style exercise for designing secure embedded systems
+LAST-MODIFIED:20260106T195849Z
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:MITRE 2026 eCTF kickoff
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20250801T010000Z
+DTSTAMP:20260701T070723Z
+UID:5r609570cmqarckof8a7fprb5k@google.com
+CREATED:20250729T235537Z
+DESCRIPTION:📍 Live on Discord voice chat |\n\nJoin us for our official kic
+ koff to the Fall 2025 semester! This meeting will cover our goals for the s
+ emester\, how to get involved\, and exciting announcements. Also get orient
+ ed with our revamped Discord\, meet fellow members\, and help shape what’s 
+ ahead for Cyber Saguaros.
+LAST-MODIFIED:20250729T235537Z
+LOCATION:Discord: Cyber Saguaros CTF Server server\, Event Stage
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:👋 CTF Welcome Meeting – Fall 2025
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260307T170000Z
+DTEND:20260308T010000Z
+DTSTAMP:20260701T070723Z
+UID:5tcpu3d47v8i5dq6s6b0oo6n5r@google.com
+CREATED:20260106T174744Z
+DESCRIPTION:NCAE Cyber Games is a cyber security competition for college st
+ udents who have never participated in a competition or hackathon before.
+LAST-MODIFIED:20260201T224929Z
+LOCATION:https://discord.ncaecybergames.org/
+SEQUENCE:1
+STATUS:CONFIRMED
+SUMMARY:2026 NCAE Cyber Games
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260424T170000Z
+DTEND:20260427T010000Z
+DTSTAMP:20260701T070723Z
+UID:73peernmmrk7a8iu7l557kvohi@google.com
+CREATED:20260226T185713Z
+DESCRIPTION:Real-world cybersecurity work is often done in teams. The NCL T
+ eam Game event provides a safe and challenging environment for players to a
+ pply their knowledge and skills in a team setting.\n\nNCL Spring 2026 Team 
+ Game is provided by Cyber Skyline.
+LAST-MODIFIED:20260226T185713Z
+LOCATION:https://cyberskyline.com/world/69690a38f845cf0a7e6d8b8a
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:NCL Spring 2026 Team Game
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260213
+DTEND;VALUE=DATE:20260221
+DTSTAMP:20260701T070723Z
+UID:bd915021-7f5e-4de6-bebe-1438a81bc81c
+CREATED:20251028T025652Z
+DESCRIPTION:A week-long CTF dedicated exclusively to reverse engineering. H
+ osted by crackmes.one\, inspired by the legendary Flare-On Challenge.
+LAST-MODIFIED:20260216T230121Z
+LOCATION:https://crackmesone.ctfd.io/
+SEQUENCE:1
+STATUS:CONFIRMED
+SUMMARY:Crackmesone RE CTF
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20251013T170000Z
+DTEND:20251020T010000Z
+DTSTAMP:20260701T070723Z
+UID:3bprg604t1jhorurduhk421vrr@google.com
+CREATED:20251003T081616Z
+DESCRIPTION:The Practice Game is another opportunity to practice your skill
+ s before the competitive NCL Games. Like the Gymnasium\, results will not b
+ e shown on your NCL Scouting Report.\n\nNCL Fall 2025 Practice Game is prov
+ ided by Cyber Skyline.
+LAST-MODIFIED:20251003T081616Z
+LOCATION:https://cyberskyline.com/world/684c235bdbe1ed8e2a7f7e6c
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:NCL Fall 2025 Practice Game
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;TZID=America/Phoenix:20251023T170000
+DTEND;TZID=America/Phoenix:20251023T180000
+RRULE:FREQ=WEEKLY;UNTIL=20260102T000000Z
+DTSTAMP:20260701T070723Z
+UID:5D46DCC4-AF34-4EB9-8CA9-D71A9820008A
+URL:https://discord.com/channels/747336630863528046/757063592490172497
+CREATED:20251017T162445Z
+LAST-MODIFIED:20251017T162529Z
+LOCATION:BASCO Discord: Cyber Saguaros VC
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:Off Dev
+TRANSP:OPAQUE
+X-APPLE-CREATOR-IDENTITY:com.apple.mobilecal
+X-APPLE-CREATOR-TEAM-IDENTITY:0000000000
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250411
+DTEND;VALUE=DATE:20250414
+DTSTAMP:20260701T070723Z
+UID:5eb8q9otrv6gs4k4qfv9eqnhak@google.com
+CREATED:20250329T091137Z
+DESCRIPTION:<a href="https://cyberskyline.com/events/ncl" target="_blank">h
+ ttps://cyberskyline.com/events/ncl</a><br><br><b>The National Cyber League 
+ (NCL) is a cybersecurity competition that prepares students for a cyber car
+ eer.</b><br><b><br></b><br>In the NCL Games\, students work to solve challe
+ nges such as identifying hackers from forensic data\, pentesting and auditi
+ ng vulnerable websites\, recovering from ransomware attacks\, and more. Par
+ ticipate in the season to track your skills growth with an NCL Scouting Rep
+ ort or represent your school in the national Cyber Power Rankings. Whether 
+ you are building your skills or competing for fun\, NCL has something for y
+ ou.<b></b>
+LAST-MODIFIED:20260404T131017Z
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:NCL Individual Game
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20260206
 DTEND;VALUE=DATE:20260208
-DTSTAMP:20260701T025512Z
+DTSTAMP:20260701T070723Z
 UID:6tduo9e9bds6n6ui7ge8a6t65b@google.com
 CREATED:20251003T080308Z
 DESCRIPTION:CactusCon is the largest annual hacker and security conference 
@@ -55,25 +358,297 @@ X-APPLE-STRUCTURED-LOCATION;VALUE=URI;X-APPLE-MAPKIT-HANDLE=CAESgAII2TIaEgm
   85201, USA":geo:33.421198,-111.830854
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;TZID=America/Phoenix:20251021T170000
-DTEND;TZID=America/Phoenix:20251021T180000
-RRULE:FREQ=MONTHLY;UNTIL=20260519T065959Z;BYDAY=3TU
-DTSTAMP:20260701T025512Z
-UID:4obvc3vmueno0fue0qgt48aq0u@google.com
-CREATED:20251023T033326Z
-DESCRIPTION:ILC RM 145
-LAST-MODIFIED:20260513T215838Z
-LOCATION:Manuel Pacheco Integrated Learning Center\, 1500 E University Blvd
- \, Tucson\, AZ 85721\, USA
-SEQUENCE:1
+DTSTART:20251008T000000Z
+DTEND:20251008T010000Z
+DTSTAMP:20260701T070723Z
+UID:7jtqqe8bjgbbqev91cibvg9lv5@google.com
+CREATED:20251003T082348Z
+DESCRIPTION:Come hang out\, share ideas\, and help shape what’s next . Let’
+ s make it a fun and productive hour together!
+LAST-MODIFIED:20251003T082348Z
+LOCATION:TBD
+SEQUENCE:0
 STATUS:CONFIRMED
 SUMMARY:Club Meeting
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20251105T135500Z
+DTEND:20251105T145500Z
+DTSTAMP:20260701T070723Z
+UID:1eh598meinihr830nq6tslecm0@google.com
+CREATED:20251105T070027Z
+DESCRIPTION:<a href="http://www.google.com">Test URL link</a><br><br><b>Tes
+ t Calandar Event for Spikey</b>
+LAST-MODIFIED:20251105T124806Z
+LOCATION:111 N Park Ave\, Tucson\, AZ 85719\, USA
+SEQUENCE:2
+STATUS:CONFIRMED
+SUMMARY:Test Calandar Event
+TRANSP:OPAQUE
+ATTACH;FILENAME=Python concepts from module 1;FMTTYPE=application/vnd.googl
+ e-apps.document:https://drive.google.com/open?id=1gJv1SDuHsPLovwfnyAIYtpNzd
+ OelaJizvg97Psr97Y0
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20250415T170000Z
+DTEND:20250415T210000Z
+DTSTAMP:20260701T070723Z
+UID:1ij9n4dk9obs9ofakgc23bo9fg@google.com
+CREATED:20250329T211632Z
+DESCRIPTION:<a href="https://asuatoday.arizona.edu/clubs-and-organizations/
+ club-events/asua-club-fair">https://asuatoday.arizona.edu/clubs-and-organiz
+ ations/club-events/asua-club-fair</a>
+LAST-MODIFIED:20260404T131017Z
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:ASUA Club Fair
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20251201T220000Z
+DTEND:20251201T230000Z
+DTSTAMP:20260701T070723Z
+UID:4j0flb8h1r0qnt3de9ntlarppn@google.com
+CREATED:20251201T205036Z
+LAST-MODIFIED:20251201T205048Z
+LOCATION:test
+SEQUENCE:1
+STATUS:CONFIRMED
+SUMMARY:test event
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250328
+DTEND;VALUE=DATE:20250329
+DTSTAMP:20260701T070723Z
+UID:3r0m0ia1vkkn42vsqu81ekbgjm@google.com
+CREATED:20250329T093009Z
+DESCRIPTION:<a href="https://cyberskyline.com/events/ncl" target="_blank"><
+ u>https://cyberskyline.com/events/ncl</u></a><br><br><b>The National Cyber 
+ League (NCL) is a cybersecurity competition that prepares students for a cy
+ ber career.</b><br><b><br></b><br>In the NCL Games\, students work to solve
+  challenges such as identifying hackers from forensic data\, pentesting and
+  auditing vulnerable websites\, recovering from ransomware attacks\, and mo
+ re. Participate in the season to track your skills growth with an NCL Scout
+ ing Report or represent your school in the national Cyber Power Rankings. W
+ hether you are building your skills or competing for fun\, NCL has somethin
+ g for you.
+LAST-MODIFIED:20260404T131017Z
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:NCL CTF Registration Closes
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20251206T160000Z
+DTEND:20251207T000000Z
+DTSTAMP:20260701T070723Z
+UID:2u2ks01uovlolhcrsck7s2g98h@google.com
+CREATED:20251003T080944Z
+LAST-MODIFIED:20251003T080944Z
+LOCATION:In-person TBA
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:WRCCDC - Invitational
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20251206T150000Z
+DTEND:20251206T230000Z
+DTSTAMP:20260701T070723Z
+UID:30n1ie7dgkaclbup92qrbt65r3@google.com
+CREATED:20251003T080556Z
+DESCRIPTION:This event will be hosted on Deloitte's Cyber CTF platform\, Ha
+ ckazon.  Now over 400 scenarios on the platform.
+LAST-MODIFIED:20251003T080726Z
+LOCATION:Virtual
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:6th Annual MWCC (Mountain West Cyber Challenge)
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20251019T023000Z
+DTEND:20251019T030000Z
+DTSTAMP:20260701T070723Z
+UID:5E77B08C-3543-4C1B-92CA-820989A91DE5
+CREATED:20251016T000017Z
+DESCRIPTION:<a href="https://discord.com/channels/1015058454236385302/13543
+ 32360522338304">https://discord.com/channels/1015058454236385302/1354332360
+ 522338304</a>
+LAST-MODIFIED:20251016T000017Z
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:Officer Meeting
+TRANSP:OPAQUE
+X-APPLE-CREATOR-IDENTITY:com.apple.mobilecal
+X-APPLE-CREATOR-TEAM-IDENTITY:0000000000
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20251024T170000Z
+DTEND:20251027T010000Z
+DTSTAMP:20260701T070723Z
+UID:3si3lii1dlajv69g1d4a1spua2@google.com
+CREATED:20251003T081713Z
+DESCRIPTION:The Individual Game will test your skills with in all 9 compete
+ ncies. The Individual Game is where individuals compete on their own\, with
+ out the assistance of others\, to solve game challenges.\n\n\nNCL Fall 2025
+  Individual Game is provided by Cyber Skyline.
+LAST-MODIFIED:20251003T081713Z
+LOCATION:https://cyberskyline.com/world/684c235bdbe1ed8e2a7f7e6f
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:NCL Fall 2025 Individual Game
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20251224T070000Z
+DTEND:20251224T080000Z
+DTSTAMP:20260701T070723Z
+UID:1pj1koli71uqbq4oo665j871of@google.com
+CREATED:20251224T043629Z
+DESCRIPTION:test description test... <br><br><a href="https://cybersaguaros
+ .com/">Cyber Saguaros Website</a>
+LAST-MODIFIED:20251224T043804Z
+LOCATION:Everywhere near you
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:Merry Christmas Eve!!
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260227T190000Z
+DTSTAMP:20260701T070723Z
+UID:5ntr7vvv36ffj3vs3il5ah4un5@google.com
+CREATED:20260203T024012Z
+DESCRIPTION:After registering at NCAE\, dm your @arizona.edu email to @talo
+ ns.\nP.S dont forget to link your discord.
+LAST-MODIFIED:20260203T024012Z
+LOCATION:https://ncaecybergames.org/
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:NCAE Team Registration Deadline
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;TZID=America/Phoenix:20251007T170000
+DTEND;TZID=America/Phoenix:20251007T180000
+RRULE:FREQ=MONTHLY;UNTIL=20260602T065959Z;BYDAY=1TU
+EXDATE;TZID=America/Phoenix:20251202T170000
+DTSTAMP:20260701T070723Z
+UID:6c50n19h2r7t40dq5i4275sa8q@google.com
+CREATED:20251023T033644Z
+DESCRIPTION:ILC RM 145
+LAST-MODIFIED:20260513T215845Z
+LOCATION:Manuel Pacheco Integrated Learning Center\, 1500 E University Blvd
+ \, Tucson\, AZ 85721\, USA
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:Club Meeting
+TRANSP:TRANSPARENT
+X-APPLE-STRUCTURED-LOCATION;VALUE=URI;X-APPLE-MAPKIT-HANDLE=CAESqgII2TIaEgn
+ 7L8Z2rR1AQBHwOnarwrxbwCKQAQoNVW5pdGVkIFN0YXRlcxICVVMaB0FyaXpvbmEiAkFaKgtQaW
+ 1hIENvdW50eTIGVHVjc29uOgU4NTcyMUIKVW5pdmVyc2l0eVIRRSBVbml2ZXJzaXR5IEJsdmRaB
+ DE1MDBiFjE1MDAgRSBVbml2ZXJzaXR5IEJsdmSKAQpVbml2ZXJzaXR5igEHQ2VudHJhbCoWMTUw
+ MCBFIFVuaXZlcnNpdHkgQmx2ZDIWMTUwMCBFIFVuaXZlcnNpdHkgQmx2ZDIRVHVjc29uLCBBWiA
+ gODU3MjEyDVVuaXRlZCBTdGF0ZXM4OUAAUAFaJgokEhIJ+y/Gdq0dQEAR8Dp2q8K8W8AY2TIg0I
+ HF/dbFt/IKkAMB;X-APPLE-RADIUS=70.58729593025343;X-APPLE-REFERENCEFRAME=1;X-
+ TITLE="Manuel Pacheco Integrated Learning Center, 1500 E University Blvd, T
+ ucson, AZ 85721, USA":geo:32.231856,-110.949382
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260108T180000Z
+DTEND:20260108T190000Z
+DTSTAMP:20260701T070723Z
+UID:5crjfe3vhl20sq58td82rifa40@google.com
+X-GOOGLE-CONFERENCE:https://meet.google.com/xad-bebv-ajq
+CREATED:20260108T155449Z
+DESCRIPTION:description section. Test non-formatted link:<br><a href="https
+ ://letmegptthatforyou.com/a/gjdoQ">https://letmegptthatforyou.com/a/gjdoQ</
+ a>\n\nJoin with Google Meet: https://meet.google.com/xad-bebv-ajq\n\nLearn 
+ more about Meet at: https://support.google.com/a/users/answer/9282720
+LAST-MODIFIED:20260108T155601Z
+LOCATION:https://letmegptthatforyou.com/a/gjdoQ
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:final test event
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260327
+DTEND;VALUE=DATE:20260330
+DTSTAMP:20260701T070723Z
+UID:1bkde0hd6ac3g3hqd18tso1286@google.com
+CREATED:20251003T081428Z
+DESCRIPTION:Western Regional Collegiate Cyber Defense Competition.  Format:
+  Blue team vs. red team (defense focus\, corporate environment)
+LAST-MODIFIED:20251003T081428Z
+LOCATION:In-person TBA
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:WRCCDC Regional Finals
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20251204T160000Z
+DTEND:20251204T230000Z
+DTSTAMP:20260701T070723Z
+UID:6g5hdc1pgm6ovk2jtdtl1in7ps@google.com
+CREATED:20251201T211722Z
+DESCRIPTION:Join cybersecurity professionals and defense industry experts f
+ or a day focused on AI/ML\, cyber threats\, defense strategies\, and risk m
+ itigation.\nCPE/CEU credit available and lunch provided.
+LAST-MODIFIED:20251201T211722Z
+LOCATION:Tech Park Event Center\, 9030 S Rita Rd\, Tucson\, AZ 85747\, USA
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:10th Annual Cyber Southwest Symposium (CSW)
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;TZID=America/Phoenix:20250402T180000
+DTEND;TZID=America/Phoenix:20250402T190000
+RRULE:FREQ=WEEKLY;UNTIL=20250723T065959Z;BYDAY=WE
+DTSTAMP:20260701T070723Z
+UID:0fgs92gpt3qmtgl9j55ajv4qf9@google.com
+CREATED:20250329T091324Z
+DESCRIPTION:<a href="https://discord.com/channels/747336630863528046/757063
+ 592490172497">https://discord.com/channels/747336630863528046/7570635924901
+ 72497</a>
+LAST-MODIFIED:20250722T210329Z
+LOCATION:Cyber Saguaros Discord
+SEQUENCE:1
+STATUS:CONFIRMED
+SUMMARY:Cyber Saguaros General Meeting
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250425
+DTEND;VALUE=DATE:20250428
+DTSTAMP:20260701T070723Z
+UID:0r107h4r7hkdkssqv3vibf9tn0@google.com
+CREATED:20250329T091208Z
+DESCRIPTION:<br><a href="https://cyberskyline.com/events/ncl" target="_blan
+ k"><u>https://cyberskyline.com/events/ncl</u></a><br><br><b>The National Cy
+ ber League (NCL) is a cybersecurity competition that prepares students for 
+ a cyber career.</b><br><b><br></b><br>In the NCL Games\, students work to s
+ olve challenges such as identifying hackers from forensic data\, pentesting
+  and auditing vulnerable websites\, recovering from ransomware attacks\, an
+ d more. Participate in the season to track your skills growth with an NCL S
+ couting Report or represent your school in the national Cyber Power Ranking
+ s. Whether you are building your skills or competing for fun\, NCL has some
+ thing for you.
+LAST-MODIFIED:20260404T131017Z
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:NCL Team Game
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
 DTSTART:20250416T180000Z
 DTEND:20250416T230000Z
-DTSTAMP:20260701T025512Z
+DTSTAMP:20260701T070723Z
 UID:6mfh71o3qqep9ns9n1n8co8eek@google.com
 CREATED:20250329T092747Z
 DESCRIPTION:<a href="https://bots.rba.community/">https://bots.rba.communit
@@ -108,541 +683,9 @@ SUMMARY:BOTS Splunk-Based CTF
 TRANSP:OPAQUE
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;TZID=America/Phoenix:20251007T170000
-DTEND;TZID=America/Phoenix:20251007T180000
-RRULE:FREQ=MONTHLY;UNTIL=20260602T065959Z;BYDAY=1TU
-EXDATE;TZID=America/Phoenix:20251202T170000
-DTSTAMP:20260701T025512Z
-UID:6c50n19h2r7t40dq5i4275sa8q@google.com
-CREATED:20251023T033644Z
-DESCRIPTION:ILC RM 145
-LAST-MODIFIED:20260513T215845Z
-LOCATION:Manuel Pacheco Integrated Learning Center\, 1500 E University Blvd
- \, Tucson\, AZ 85721\, USA
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:Club Meeting
-TRANSP:TRANSPARENT
-X-APPLE-STRUCTURED-LOCATION;VALUE=URI;X-APPLE-MAPKIT-HANDLE=CAESqgII2TIaEgn
- 7L8Z2rR1AQBHwOnarwrxbwCKQAQoNVW5pdGVkIFN0YXRlcxICVVMaB0FyaXpvbmEiAkFaKgtQaW
- 1hIENvdW50eTIGVHVjc29uOgU4NTcyMUIKVW5pdmVyc2l0eVIRRSBVbml2ZXJzaXR5IEJsdmRaB
- DE1MDBiFjE1MDAgRSBVbml2ZXJzaXR5IEJsdmSKAQpVbml2ZXJzaXR5igEHQ2VudHJhbCoWMTUw
- MCBFIFVuaXZlcnNpdHkgQmx2ZDIWMTUwMCBFIFVuaXZlcnNpdHkgQmx2ZDIRVHVjc29uLCBBWiA
- gODU3MjEyDVVuaXRlZCBTdGF0ZXM4OUAAUAFaJgokEhIJ+y/Gdq0dQEAR8Dp2q8K8W8AY2TIg0I
- HF/dbFt/IKkAMB;X-APPLE-RADIUS=70.58729593025343;X-APPLE-REFERENCEFRAME=1;X-
- TITLE="Manuel Pacheco Integrated Learning Center, 1500 E University Blvd, T
- ucson, AZ 85721, USA":geo:32.231856,-110.949382
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250414
-DTEND;VALUE=DATE:20250415
-DTSTAMP:20260701T025512Z
-UID:77a6o6iefo5l13jtalec75v0uj@google.com
-CREATED:20250329T092841Z
-DESCRIPTION:<a href="https://bots.rba.community/" target="_blank"><u>https:
- //bots.rba.community/</u></a><br><br><a href="https://www.eventbrite.com/e/
- southwest-boss-of-the-soc-bots-spring-2025-tickets-1246726495509?aff=oddtdt
- creator" target="_blank"><u>https://www.eventbrite.com/e/southwest-boss-of-
- the-soc-bots-spring-2025-tickets-1246726495509?aff=oddtdtcreator</u></a><br
- ><br><br>Southwest States Splunk Event: Boss of the SOC (BOTS)<br><br>Boss 
- of the SOC (BOTS) is a cutting-edge\, team-based cybersecurity competition 
- designed to replicate real-world challenges faced by today’s Security Opera
- tions Centers (SOCs). Participants will work in teams to investigate\, dete
- ct\, and respond to simulated security incidents using Splunk’s leading sec
- urity tools. This dynamic competition fosters critical thinking\, problem-s
- olving\, and analytical skills\, all while providing a unique learning oppo
- rtunity.<br><br>Key Objectives:<br><ul><li>Gain hands-on experience with Sp
- lunk’s Security Suite and other cybersecurity tools.</li><li>Learn to inves
- tigate and respond to cybersecurity incidents in a real-time\, high-pressur
- e environment.</li><li>Develop advanced threat detection\, investigation\, 
- and response techniques that are immediately applicable in SOCs.</li><li>Co
- llaborate in teams to solve complex security challenges.</li></ul>Who Shoul
- d Attend:<br><ul><li>Students studying cybersecurity\, computer science\, o
- r information technology.</li><li>Cybersecurity professionals looking to sh
- arpen their SOC skills.</li><li>Educators interested in incorporating hands
- -on cybersecurity training into their programs.</li><li>Anyone passionate a
- bout cybersecurity and threat detection.</li></ul>
-LAST-MODIFIED:20260404T131017Z
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:BOTS CTF Registration Closes
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20251206T150000Z
-DTEND:20251206T230000Z
-DTSTAMP:20260701T025512Z
-UID:30n1ie7dgkaclbup92qrbt65r3@google.com
-CREATED:20251003T080556Z
-DESCRIPTION:This event will be hosted on Deloitte's Cyber CTF platform\, Ha
- ckazon.  Now over 400 scenarios on the platform.
-LAST-MODIFIED:20251003T080726Z
-LOCATION:Virtual
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:6th Annual MWCC (Mountain West Cyber Challenge)
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20251008T000000Z
-DTEND:20251008T010000Z
-DTSTAMP:20260701T025512Z
-UID:7jtqqe8bjgbbqev91cibvg9lv5@google.com
-CREATED:20251003T082348Z
-DESCRIPTION:Come hang out\, share ideas\, and help shape what’s next . Let’
- s make it a fun and productive hour together!
-LAST-MODIFIED:20251003T082348Z
-LOCATION:TBD
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:Club Meeting
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20251204T160000Z
-DTEND:20251204T230000Z
-DTSTAMP:20260701T025512Z
-UID:6g5hdc1pgm6ovk2jtdtl1in7ps@google.com
-CREATED:20251201T211722Z
-DESCRIPTION:Join cybersecurity professionals and defense industry experts f
- or a day focused on AI/ML\, cyber threats\, defense strategies\, and risk m
- itigation.\nCPE/CEU credit available and lunch provided.
-LAST-MODIFIED:20251201T211722Z
-LOCATION:Tech Park Event Center\, 9030 S Rita Rd\, Tucson\, AZ 85747\, USA
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:10th Annual Cyber Southwest Symposium (CSW)
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250412
-DTEND;VALUE=DATE:20250413
-DTSTAMP:20260701T025512Z
-UID:6vu4o3h6i5b23aujta9fb1nleb@google.com
-CREATED:20250329T211526Z
-LAST-MODIFIED:20260404T131017Z
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:New Student Admission Day
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20251013T170000Z
-DTEND:20251020T010000Z
-DTSTAMP:20260701T025512Z
-UID:3bprg604t1jhorurduhk421vrr@google.com
-CREATED:20251003T081616Z
-DESCRIPTION:The Practice Game is another opportunity to practice your skill
- s before the competitive NCL Games. Like the Gymnasium\, results will not b
- e shown on your NCL Scouting Report.\n\nNCL Fall 2025 Practice Game is prov
- ided by Cyber Skyline.
-LAST-MODIFIED:20251003T081616Z
-LOCATION:https://cyberskyline.com/world/684c235bdbe1ed8e2a7f7e6c
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:NCL Fall 2025 Practice Game
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250328
-DTEND;VALUE=DATE:20250329
-DTSTAMP:20260701T025512Z
-UID:3r0m0ia1vkkn42vsqu81ekbgjm@google.com
-CREATED:20250329T093009Z
-DESCRIPTION:<a href="https://cyberskyline.com/events/ncl" target="_blank"><
- u>https://cyberskyline.com/events/ncl</u></a><br><br><b>The National Cyber 
- League (NCL) is a cybersecurity competition that prepares students for a cy
- ber career.</b><br><b><br></b><br>In the NCL Games\, students work to solve
-  challenges such as identifying hackers from forensic data\, pentesting and
-  auditing vulnerable websites\, recovering from ransomware attacks\, and mo
- re. Participate in the season to track your skills growth with an NCL Scout
- ing Report or represent your school in the national Cyber Power Rankings. W
- hether you are building your skills or competing for fun\, NCL has somethin
- g for you.
-LAST-MODIFIED:20260404T131017Z
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:NCL CTF Registration Closes
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20250801T010000Z
-DTSTAMP:20260701T025512Z
-UID:5r609570cmqarckof8a7fprb5k@google.com
-CREATED:20250729T235537Z
-DESCRIPTION:📍 Live on Discord voice chat |\n\nJoin us for our official kic
- koff to the Fall 2025 semester! This meeting will cover our goals for the s
- emester\, how to get involved\, and exciting announcements. Also get orient
- ed with our revamped Discord\, meet fellow members\, and help shape what’s 
- ahead for Cyber Saguaros.
-LAST-MODIFIED:20250729T235537Z
-LOCATION:Discord: Cyber Saguaros CTF Server server\, Event Stage
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:👋 CTF Welcome Meeting – Fall 2025
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20251206T160000Z
-DTEND:20251207T000000Z
-DTSTAMP:20260701T025512Z
-UID:2u2ks01uovlolhcrsck7s2g98h@google.com
-CREATED:20251003T080944Z
-LAST-MODIFIED:20251003T080944Z
-LOCATION:In-person TBA
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:WRCCDC - Invitational
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20251224T070000Z
-DTEND:20251224T080000Z
-DTSTAMP:20260701T025512Z
-UID:1pj1koli71uqbq4oo665j871of@google.com
-CREATED:20251224T043629Z
-DESCRIPTION:test description test... <br><br><a href="https://cybersaguaros
- .com/">Cyber Saguaros Website</a>
-LAST-MODIFIED:20251224T043804Z
-LOCATION:Everywhere near you
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:Merry Christmas Eve!!
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20250415T170000Z
-DTEND:20250415T210000Z
-DTSTAMP:20260701T025512Z
-UID:1ij9n4dk9obs9ofakgc23bo9fg@google.com
-CREATED:20250329T211632Z
-DESCRIPTION:<a href="https://asuatoday.arizona.edu/clubs-and-organizations/
- club-events/asua-club-fair">https://asuatoday.arizona.edu/clubs-and-organiz
- ations/club-events/asua-club-fair</a>
-LAST-MODIFIED:20260404T131017Z
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:ASUA Club Fair
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250425
-DTEND;VALUE=DATE:20250428
-DTSTAMP:20260701T025512Z
-UID:0r107h4r7hkdkssqv3vibf9tn0@google.com
-CREATED:20250329T091208Z
-DESCRIPTION:<br><a href="https://cyberskyline.com/events/ncl" target="_blan
- k"><u>https://cyberskyline.com/events/ncl</u></a><br><br><b>The National Cy
- ber League (NCL) is a cybersecurity competition that prepares students for 
- a cyber career.</b><br><b><br></b><br>In the NCL Games\, students work to s
- olve challenges such as identifying hackers from forensic data\, pentesting
-  and auditing vulnerable websites\, recovering from ransomware attacks\, an
- d more. Participate in the season to track your skills growth with an NCL S
- couting Report or represent your school in the national Cyber Power Ranking
- s. Whether you are building your skills or competing for fun\, NCL has some
- thing for you.
-LAST-MODIFIED:20260404T131017Z
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:NCL Team Game
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250411
-DTEND;VALUE=DATE:20250414
-DTSTAMP:20260701T025512Z
-UID:5eb8q9otrv6gs4k4qfv9eqnhak@google.com
-CREATED:20250329T091137Z
-DESCRIPTION:<a href="https://cyberskyline.com/events/ncl" target="_blank">h
- ttps://cyberskyline.com/events/ncl</a><br><br><b>The National Cyber League 
- (NCL) is a cybersecurity competition that prepares students for a cyber car
- eer.</b><br><b><br></b><br>In the NCL Games\, students work to solve challe
- nges such as identifying hackers from forensic data\, pentesting and auditi
- ng vulnerable websites\, recovering from ransomware attacks\, and more. Par
- ticipate in the season to track your skills growth with an NCL Scouting Rep
- ort or represent your school in the national Cyber Power Rankings. Whether 
- you are building your skills or competing for fun\, NCL has something for y
- ou.<b></b>
-LAST-MODIFIED:20260404T131017Z
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:NCL Individual Game
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20260307T170000Z
-DTEND:20260308T010000Z
-DTSTAMP:20260701T025512Z
-UID:5tcpu3d47v8i5dq6s6b0oo6n5r@google.com
-CREATED:20260106T174744Z
-DESCRIPTION:NCAE Cyber Games is a cyber security competition for college st
- udents who have never participated in a competition or hackathon before.
-LAST-MODIFIED:20260201T224929Z
-LOCATION:https://discord.ncaecybergames.org/
-SEQUENCE:1
-STATUS:CONFIRMED
-SUMMARY:2026 NCAE Cyber Games
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20251024T170000Z
-DTEND:20251027T010000Z
-DTSTAMP:20260701T025512Z
-UID:3si3lii1dlajv69g1d4a1spua2@google.com
-CREATED:20251003T081713Z
-DESCRIPTION:The Individual Game will test your skills with in all 9 compete
- ncies. The Individual Game is where individuals compete on their own\, with
- out the assistance of others\, to solve game challenges.\n\n\nNCL Fall 2025
-  Individual Game is provided by Cyber Skyline.
-LAST-MODIFIED:20251003T081713Z
-LOCATION:https://cyberskyline.com/world/684c235bdbe1ed8e2a7f7e6f
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:NCL Fall 2025 Individual Game
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20260108T180000Z
-DTEND:20260108T190000Z
-DTSTAMP:20260701T025512Z
-UID:5crjfe3vhl20sq58td82rifa40@google.com
-X-GOOGLE-CONFERENCE:https://meet.google.com/xad-bebv-ajq
-CREATED:20260108T155449Z
-DESCRIPTION:description section. Test non-formatted link:<br><a href="https
- ://letmegptthatforyou.com/a/gjdoQ">https://letmegptthatforyou.com/a/gjdoQ</
- a>\n\nJoin with Google Meet: https://meet.google.com/xad-bebv-ajq\n\nLearn 
- more about Meet at: https://support.google.com/a/users/answer/9282720
-LAST-MODIFIED:20260108T155601Z
-LOCATION:https://letmegptthatforyou.com/a/gjdoQ
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:final test event
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20260213
-DTEND;VALUE=DATE:20260221
-DTSTAMP:20260701T025512Z
-UID:bd915021-7f5e-4de6-bebe-1438a81bc81c
-CREATED:20251028T025652Z
-DESCRIPTION:A week-long CTF dedicated exclusively to reverse engineering. H
- osted by crackmes.one\, inspired by the legendary Flare-On Challenge.
-LAST-MODIFIED:20260216T230121Z
-LOCATION:https://crackmesone.ctfd.io/
-SEQUENCE:1
-STATUS:CONFIRMED
-SUMMARY:Crackmesone RE CTF
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20260114
-DTEND;VALUE=DATE:20260115
-DTSTAMP:20260701T025512Z
-UID:4crp6s5psmst5ft0t1vf0npv44@google.com
-CREATED:20260106T195839Z
-DESCRIPTION:The Embedded Capture the Flag (eCTF) Competition is a design-bu
- ild-attack-style exercise for designing secure embedded systems
-LAST-MODIFIED:20260106T195849Z
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:MITRE 2026 eCTF kickoff
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;TZID=America/Phoenix:20251023T170000
-DTEND;TZID=America/Phoenix:20251023T180000
-RRULE:FREQ=WEEKLY;UNTIL=20260102T000000Z
-DTSTAMP:20260701T025512Z
-UID:5D46DCC4-AF34-4EB9-8CA9-D71A9820008A
-URL:https://discord.com/channels/747336630863528046/757063592490172497
-CREATED:20251017T162445Z
-LAST-MODIFIED:20251017T162529Z
-LOCATION:BASCO Discord: Cyber Saguaros VC
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:Off Dev
-TRANSP:OPAQUE
-X-APPLE-CREATOR-IDENTITY:com.apple.mobilecal
-X-APPLE-CREATOR-TEAM-IDENTITY:0000000000
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20251027T193000Z
-DTEND:20251027T210000Z
-DTSTAMP:20260701T025512Z
-UID:6ot0lap3i9eqaqu31o0sev94al@google.com
-CREATED:20251023T235526Z
-DESCRIPTION:Join the College of Information Science at the University of Ar
- izona for online Speaker Series: Chris Yako\, a Security Platforms Engineer
-  at State Street.
-LAST-MODIFIED:20251023T235526Z
-LOCATION:Online via Zoom
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:Guest Speaker: Chris Yako
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20251019T023000Z
-DTEND:20251019T030000Z
-DTSTAMP:20260701T025512Z
-UID:5E77B08C-3543-4C1B-92CA-820989A91DE5
-CREATED:20251016T000017Z
-DESCRIPTION:<a href="https://discord.com/channels/1015058454236385302/13543
- 32360522338304">https://discord.com/channels/1015058454236385302/1354332360
- 522338304</a>
-LAST-MODIFIED:20251016T000017Z
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:Officer Meeting
-TRANSP:OPAQUE
-X-APPLE-CREATOR-IDENTITY:com.apple.mobilecal
-X-APPLE-CREATOR-TEAM-IDENTITY:0000000000
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20260110T150000Z
-DTEND:20260110T230000Z
-DTSTAMP:20260701T025512Z
-UID:05fh44p9ejcd1aikpe9iocavfp@google.com
-CREATED:20260106T200448Z
-DESCRIPTION:Teams will compete in one 7-hour round of Cybersecurity Capture
-  the Flag (CTF) to take home the title and great prizes!
-LAST-MODIFIED:20260106T200448Z
-LOCATION:https://web.cvent.com/event/053df0ae-55ed-4f5e-b7a5-5c68e3503183/s
- ummary
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:Mountain West Cyber Challenge (MWCC)
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;TZID=America/Phoenix:20250402T180000
-DTEND;TZID=America/Phoenix:20250402T190000
-RRULE:FREQ=WEEKLY;UNTIL=20250723T065959Z;BYDAY=WE
-DTSTAMP:20260701T025512Z
-UID:0fgs92gpt3qmtgl9j55ajv4qf9@google.com
-CREATED:20250329T091324Z
-DESCRIPTION:<a href="https://discord.com/channels/747336630863528046/757063
- 592490172497">https://discord.com/channels/747336630863528046/7570635924901
- 72497</a>
-LAST-MODIFIED:20250722T210329Z
-LOCATION:Cyber Saguaros Discord
-SEQUENCE:1
-STATUS:CONFIRMED
-SUMMARY:Cyber Saguaros General Meeting
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20251205T103000Z
-DTEND:20251205T231500Z
-DTSTAMP:20260701T025512Z
-UID:6ksmachj71h6cbb270qjeb9k6tj6ab9pcphj2b9ic9gmcp1k6coj6p356c@google.com
-CREATED:20251115T054347Z
-LAST-MODIFIED:20251115T054348Z
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:2025 State of Arizona Cyber Summit
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20251201T220000Z
-DTEND:20251201T230000Z
-DTSTAMP:20260701T025512Z
-UID:4j0flb8h1r0qnt3de9ntlarppn@google.com
-CREATED:20251201T205036Z
-LAST-MODIFIED:20251201T205048Z
-LOCATION:test
-SEQUENCE:1
-STATUS:CONFIRMED
-SUMMARY:test event
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20260330T170000Z
-DTEND:20260406T010000Z
-DTSTAMP:20260701T025512Z
-UID:2rfa0nltatuhmfoerrl2rtcok1@google.com
-CREATED:20260226T185611Z
-DESCRIPTION:The Practice Game is another opportunity to practice your skill
- s before the competitive NCL Games. Like the Gymnasium\, results will not b
- e shown on your NCL Scouting Report.\n\nNCL Spring 2026 Practice Game is pr
- ovided by Cyber Skyline.
-LAST-MODIFIED:20260226T185611Z
-LOCATION:https://cyberskyline.com/world/69690a38f845cf0a7e6d8b84
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:NCL Spring 2026 Practice Game
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20260410T170000Z
-DTEND:20260413T010000Z
-DTSTAMP:20260701T025512Z
-UID:1rsnc8dgok8it4mqm279t6evi4@google.com
-CREATED:20260226T185643Z
-DESCRIPTION:The Individual Game will test your skills with in all 9 compete
- ncies. The Individual Game is where individuals compete on their own\, with
- out the assistance of others\, to solve game challenges.\n\nNCL Spring 2026
-  Individual Game is provided by Cyber Skyline.
-LAST-MODIFIED:20260226T185643Z
-LOCATION:https://cyberskyline.com/world/69690a38f845cf0a7e6d8b87
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:NCL Spring 2026 Individual Game
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20260227T190000Z
-DTSTAMP:20260701T025512Z
-UID:5ntr7vvv36ffj3vs3il5ah4un5@google.com
-CREATED:20260203T024012Z
-DESCRIPTION:After registering at NCAE\, dm your @arizona.edu email to @talo
- ns.\nP.S dont forget to link your discord.
-LAST-MODIFIED:20260203T024012Z
-LOCATION:https://ncaecybergames.org/
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:NCAE Team Registration Deadline
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20251105T135500Z
-DTEND:20251105T145500Z
-DTSTAMP:20260701T025512Z
-UID:1eh598meinihr830nq6tslecm0@google.com
-CREATED:20251105T070027Z
-DESCRIPTION:<a href="http://www.google.com">Test URL link</a><br><br><b>Tes
- t Calandar Event for Spikey</b>
-LAST-MODIFIED:20251105T124806Z
-LOCATION:111 N Park Ave\, Tucson\, AZ 85719\, USA
-SEQUENCE:2
-STATUS:CONFIRMED
-SUMMARY:Test Calandar Event
-TRANSP:OPAQUE
-ATTACH;FILENAME=Python concepts from module 1;FMTTYPE=application/vnd.googl
- e-apps.document:https://drive.google.com/open?id=1gJv1SDuHsPLovwfnyAIYtpNzd
- OelaJizvg97Psr97Y0
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20260424T170000Z
-DTEND:20260427T010000Z
-DTSTAMP:20260701T025512Z
-UID:73peernmmrk7a8iu7l557kvohi@google.com
-CREATED:20260226T185713Z
-DESCRIPTION:Real-world cybersecurity work is often done in teams. The NCL T
- eam Game event provides a safe and challenging environment for players to a
- pply their knowledge and skills in a team setting.\n\nNCL Spring 2026 Team 
- Game is provided by Cyber Skyline.
-LAST-MODIFIED:20260226T185713Z
-LOCATION:https://cyberskyline.com/world/69690a38f845cf0a7e6d8b8a
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:NCL Spring 2026 Team Game
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
 DTSTART:20251029T010000Z
 DTEND:20251029T020000Z
-DTSTAMP:20260701T025512Z
+DTSTAMP:20260701T070723Z
 UID:2a075fer9epdppdss8l9qb64be@google.com
 CREATED:20251028T193729Z
 DESCRIPTION:blah blah blah blab dfhasdhalosdkg. ladkshga\;lg ahdg\;'asdgh <
@@ -655,34 +698,9 @@ SUMMARY:test event
 TRANSP:OPAQUE
 END:VEVENT
 BEGIN:VEVENT
-DTSTART:20250405T170000Z
-DTEND:20250406T000000Z
-DTSTAMP:20260701T025512Z
-UID:5c1l1b4hoqpo0r6v8irmhm8ij5@google.com
-CREATED:20250329T092059Z
-DESCRIPTION:<a href="https://specialevents.asu.edu/ereg/newreg.php?eventid=
- 831251&amp\;" target="_blank">https://specialevents.asu.edu/ereg/newreg.php
- ?eventid=831251&amp\;</a><br><br>Format: Individual Competition (no teams)<
- br><br>Open to all Arizona undergraduates–no prior experience required!<br>
- <br>Are you an undergraduate student interested in hacking\, and enrolled a
- t an Arizona community college or university? Test your skills in the Arizo
- na Capture the Flag (CTF) Competition! Hosted by Arizona State University\,
-  Grand Canyon University\, Northern Arizona University\, and the University
-  of Arizona\, this one-day cybersecurity challenge will feature hands-on ha
- cking challenges on pwn.college.<br><br>Prizes will be awarded to the top p
- erformers!
-LAST-MODIFIED:20260404T131017Z
-LOCATION:In-person at ASU Tempe\, NAU Flagstaff\, GCU Phoenix\, and UA Tucs
- on with a virtual option for remote competitors
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:ASU CTF Competition
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
 DTSTART:20250331T200000Z
 DTEND:20250331T210000Z
-DTSTAMP:20260701T025512Z
+DTSTAMP:20260701T070723Z
 UID:328u94ijtbt1am84krrjb7e1qc@google.com
 CREATED:20250329T211416Z
 DESCRIPTION:<a href="https://discord.com/channels/1015058454236385302/13543
@@ -699,64 +717,46 @@ ATTACH;FILENAME=CyberSaguaros_OfficerMeeting_03.31.25;FMTTYPE=application/v
  487100Zx33n5eFgnBunC1kdgfE
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20260327
-DTEND;VALUE=DATE:20260330
-DTSTAMP:20260701T025512Z
-UID:1bkde0hd6ac3g3hqd18tso1286@google.com
-CREATED:20251003T081428Z
-DESCRIPTION:Western Regional Collegiate Cyber Defense Competition.  Format:
-  Blue team vs. red team (defense focus\, corporate environment)
-LAST-MODIFIED:20251003T081428Z
-LOCATION:In-person TBA
+DTSTART:20251205T103000Z
+DTEND:20251205T231500Z
+DTSTAMP:20260701T070723Z
+UID:6ksmachj71h6cbb270qjeb9k6tj6ab9pcphj2b9ic9gmcp1k6coj6p356c@google.com
+CREATED:20251115T054347Z
+LAST-MODIFIED:20251115T054348Z
 SEQUENCE:0
 STATUS:CONFIRMED
-SUMMARY:WRCCDC Regional Finals
+SUMMARY:2025 State of Arizona Cyber Summit
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260417
+DTEND;VALUE=DATE:20260419
+DTSTAMP:20260701T070723Z
+UID:18tp2edva6akvefhhjama1l6k9@google.com
+CREATED:20260106T195631Z
+DESCRIPTION:The theme for the 2026 competition is “AI-Enhanced Social Engin
+ eering Attacks on a Community-Based Pharmacy”.
+LAST-MODIFIED:20260106T195645Z
+LOCATION:Virtual
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:CARE Lab’s 6th Annual Social Engineering Competition
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20260309
-DTEND;VALUE=DATE:20260320
-DTSTAMP:20260701T025512Z
-UID:4tuo9ltqursq1o8aikmqqhlfnp@google.com
-CREATED:20260205T213739Z
-DESCRIPTION:Event Hub Thread:<br><a href="https://discordapp.com/channels/1
- 165869701436559421/1469082082377728173"><br>https://discordapp.com/channels
- /1165869701436559421/1469082082377728173</a>
-LAST-MODIFIED:20260205T213740Z
+DTSTART:20260110T150000Z
+DTEND:20260110T230000Z
+DTSTAMP:20260701T070723Z
+UID:05fh44p9ejcd1aikpe9iocavfp@google.com
+CREATED:20260106T200448Z
+DESCRIPTION:Teams will compete in one 7-hour round of Cybersecurity Capture
+  the Flag (CTF) to take home the title and great prizes!
+LAST-MODIFIED:20260106T200448Z
+LOCATION:https://web.cvent.com/event/053df0ae-55ed-4f5e-b7a5-5c68e3503183/s
+ ummary
 SEQUENCE:0
 STATUS:CONFIRMED
-SUMMARY:picoCTF 2026
-TRANSP:TRANSPARENT
-ATTACH;FILENAME=Screenshot from 2026-02-05 14-22-30.png;FMTTYPE=image/png:h
- ttps://drive.google.com/open?id=1ytYY0MmetJvjnMhcW3uG0r-AQab3HwF7
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250812
-DTEND;VALUE=DATE:20250813
-DTSTAMP:20260701T025512Z
-UID:4tm4pidv90auggdqnolkd8m0ov@google.com
-CREATED:20250329T211658Z
-LAST-MODIFIED:20260404T131017Z
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:New Student Orientation
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-DTSTART:20251107T180000Z
-DTEND:20251110T020000Z
-DTSTAMP:20260701T025512Z
-UID:4ofmnbkm207i6oc0iv1ip89ail@google.com
-CREATED:20251106T023738Z
-DESCRIPTION:Real-world cybersecurity work is often done in teams. The NCL T
- eam Game event provides a safe and challenging environment for players to a
- pply their knowledge and skills in a team setting.\n\n\nNCL Fall 2025 Team 
- Game is provided by Cyber Skyline.
-LAST-MODIFIED:20251106T023738Z
-LOCATION:https://cyberskyline.com/world/684c235bdbe1ed8e2a7f7e72
-SEQUENCE:0
-STATUS:CONFIRMED
-SUMMARY:NCL Fall 2025 Team Game
+SUMMARY:Mountain West Cyber Challenge (MWCC)
 TRANSP:OPAQUE
 END:VEVENT
 END:VCALENDAR
